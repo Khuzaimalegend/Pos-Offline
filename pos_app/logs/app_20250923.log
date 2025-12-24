@@ -1,0 +1,2 @@
+2025-09-23 17:22:57,972 - app - ERROR - Application error: 'SuppliersWidget' object has no attribute '_prev_page'
+2025-09-23 17:48:27,241 - app - ERROR - Application error: 'SuppliersWidget' object has no attribute '_prev_page'

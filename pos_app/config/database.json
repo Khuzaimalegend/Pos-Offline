@@ -1,0 +1,7 @@
+{
+    "host": "39.58.219.166",
+    "port": "5432",
+    "database": "pos_network",
+    "username": "admin",
+    "password": "admin"
+}

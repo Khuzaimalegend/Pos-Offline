@@ -1,0 +1,41 @@
+{
+  "started_at": "2025-12-15T12:27:29",
+  "finished_at": "2025-12-15T12:27:34",
+  "ok": false,
+  "steps": [
+    {
+      "name": "db_connect",
+      "ok": true,
+      "details": "Connected",
+      "data": null,
+      "ts": "2025-12-15T12:27:31"
+    },
+    {
+      "name": "seed_data",
+      "ok": true,
+      "details": "Created supplier/customer/product",
+      "data": {
+        "customer_id": 34,
+        "supplier_id": 52,
+        "product_id": 37,
+        "sale_id": null,
+        "refund_id": null
+      },
+      "ts": "2025-12-15T12:27:31"
+    },
+    {
+      "name": "sale_create",
+      "ok": false,
+      "details": "Sale not created",
+      "data": null,
+      "ts": "2025-12-15T12:27:34"
+    },
+    {
+      "name": "cleanup",
+      "ok": false,
+      "details": "(psycopg2.errors.ForeignKeyViolation) update or delete on table \"products\" violates foreign key constraint \"stock_movements_product_id_fkey\" on table \"stock_movements\"\nDETAIL:  Key (id)=(37) is still referenced from table \"stock_movements\".\n\n[SQL: DELETE FROM products WHERE products.id = %(id_1)s]\n[parameters: {'id_1': 37}]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)",
+      "data": null,
+      "ts": "2025-12-15T12:27:34"
+    }
+  ]
+}

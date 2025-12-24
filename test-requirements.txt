@@ -1,0 +1,23 @@
+# Testing Requirements for POS Application
+# Install with: pip install -r test-requirements.txt
+
+# Core testing framework
+pytest>=7.0.0
+pytest-cov>=4.0.0
+pytest-xdist>=3.0.0  # For parallel test execution
+
+# Database testing
+sqlalchemy>=1.4.0
+
+# Mocking and fixtures
+pytest-mock>=3.10.0
+
+# Code quality (optional but recommended)
+pytest-flake8>=1.1.0
+pytest-pylint>=0.19.0
+
+# Performance testing (optional)
+pytest-benchmark>=4.0.0
+
+# HTML reporting (optional)
+pytest-html>=3.1.0

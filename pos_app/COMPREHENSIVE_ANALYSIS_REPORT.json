@@ -1,0 +1,860 @@
+{
+  "summary": {
+    "errors": 1,
+    "warnings": 121,
+    "info": 0
+  },
+  "errors": [
+    {
+      "file": "c:\\POS\\pos_app\\ui\\main_window.py",
+      "line": 90,
+      "type": "SyntaxError",
+      "message": "expected an indented block after 'try' statement on line 89 (main_window.py, line 90)"
+    }
+  ],
+  "warnings": [
+    {
+      "file": "c:\\POS\\pos_app\\main.py",
+      "line": 201,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "admin_user = db.session.query(User).filter(User.username == 'admin').first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\controllers\\business_logic.py",
+      "line": 137,
+      "type": "PotentialEnumError",
+      "message": "Potential .name call on string (PostgreSQL stores as VARCHAR)",
+      "code": "location_str = location.name  # Get enum name as string"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\controllers\\business_logic.py",
+      "line": 17,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "if not self.session.query(Product).filter_by(sku=code).first():  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\controllers\\business_logic.py",
+      "line": 478,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "self.session.query(Payment)"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\controllers\\business_logic.py",
+      "line": 492,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "self.session.query(Payment)"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\controllers\\business_logic.py",
+      "line": 640,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "total_sales_today = sum(s.total_amount for s in self.session.query(Sale).filter(Sale.sale_date >= start_of_day).all() or [])"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\controllers\\business_logic.py",
+      "line": 641,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "monthly_revenue = sum(s.total_amount for s in self.session.query(Sale).filter(Sale.sale_date >= monthly_start).all() or [])"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\controllers\\business_logic.py",
+      "line": 642,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "low_stock = len(self.session.query(Product).filter(Product.stock_level <= Product.reorder_level).all())  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\controllers\\business_logic.py",
+      "line": 643,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "active_customers = self.session.query(Customer).filter(Customer.is_active == True).count()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\controllers\\business_logic.py",
+      "line": 645,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "total_expenses = sum(e.amount for e in self.session.query(Expense).all() or [])"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\controllers\\business_logic.py",
+      "line": 942,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "items = self.session.query(PurchaseItem).filter(PurchaseItem.purchase_id == purchase_id).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\controllers\\business_logic.py",
+      "line": 995,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "items = self.session.query(PurchaseItem).filter(  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\controllers\\business_logic.py",
+      "line": 1129,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "return self.session.query(Sale).filter("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\controllers\\business_logic.py",
+      "line": 1134,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "return self.session.query(Customer).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\controllers\\business_logic.py",
+      "line": 1311,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "return self.session.query(Customer).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\controllers\\business_logic.py",
+      "line": 1424,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "return self.session.query(Supplier).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\database\\db_utils.py",
+      "line": 23,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "result = session.query(MyModel).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\database\\db_utils.py",
+      "line": 48,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "return session.query(User).filter(User.id == user_id).first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\database\\migrate.py",
+      "line": 29,
+      "type": "MissingCommit",
+      "message": "DDL/DML statement without commit() - transaction may not persist",
+      "code": "session.execute(text("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\database\\migrate.py",
+      "line": 43,
+      "type": "MissingCommit",
+      "message": "DDL/DML statement without commit() - transaction may not persist",
+      "code": "session.execute(text("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\database\\migrate.py",
+      "line": 73,
+      "type": "MissingCommit",
+      "message": "DDL/DML statement without commit() - transaction may not persist",
+      "code": "session.execute(text("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\database\\migrate.py",
+      "line": 84,
+      "type": "MissingCommit",
+      "message": "DDL/DML statement without commit() - transaction may not persist",
+      "code": "session.execute(text("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\database\\migrate.py",
+      "line": 110,
+      "type": "MissingCommit",
+      "message": "DDL/DML statement without commit() - transaction may not persist",
+      "code": "session.execute("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\database\\migrate.py",
+      "line": 119,
+      "type": "DeprecatedAPI",
+      "message": "datetime.utcnow() is deprecated, use datetime.now(timezone.utc)",
+      "code": "\"applied_at\": datetime.utcnow(),"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\database\\migrate.py",
+      "line": 157,
+      "type": "MissingCommit",
+      "message": "DDL/DML statement without commit() - transaction may not persist",
+      "code": "session.execute(text("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\utils\\validators.py",
+      "line": 186,
+      "type": "BareExcept",
+      "message": "Bare except clause - catches all exceptions including system exits"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\advanced_purchase_management.py",
+      "line": 375,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "last_payment = self.controller.session.query(PurchasePayment).filter(  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\advanced_purchase_management.py",
+      "line": 424,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "supplier_stats = self.controller.session.query("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\advanced_purchase_management.py",
+      "line": 447,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "monthly_purchases = self.controller.session.query(Purchase).filter(  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\advanced_purchase_management.py",
+      "line": 459,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "all_purchases = self.controller.session.query(Purchase).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\advanced_purchase_management.py",
+      "line": 605,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "purchase = self.controller.session.get(self.controller.session.query(self.controller.session.query.__class__).first().__class__, self.purchase_id)"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\all_payments.py",
+      "line": 98,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "customer_payments = self.controller.session.query(Payment).filter("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\all_payments.py",
+      "line": 104,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "supplier_payments = self.controller.session.query(PurchasePayment).filter("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\bank_management.py",
+      "line": 388,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "month_transactions = self.controller.session.query(BankTransaction).filter(  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\bank_management.py",
+      "line": 403,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "year_transactions = self.controller.session.query(BankTransaction).filter(  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\bank_management.py",
+      "line": 416,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "recent_transactions = self.controller.session.query(BankTransaction).join(BankAccount).order_by("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\customer_payments.py",
+      "line": 106,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "customers = self.controller.session.query(Customer).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\customer_reports.py",
+      "line": 400,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "sales = self.controller.session.query(Sale).filter(  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\customer_reports.py",
+      "line": 444,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "query = self.controller.session.query("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\customer_reports.py",
+      "line": 545,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "total_customers = self.controller.session.query(Customer).filter(  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\customer_reports.py",
+      "line": 549,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "active_customers = self.controller.session.query(Customer).join(Sale).filter(  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\customer_reports.py",
+      "line": 554,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "new_customers = self.controller.session.query(Customer).filter(  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\customer_reports.py",
+      "line": 560,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "total_revenue = self.controller.session.query(func.sum(Sale.total_amount)).filter(  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\customer_reports.py",
+      "line": 574,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "top_customers = self.controller.session.query("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\customer_reports.py",
+      "line": 617,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "sales_stats = self.controller.session.query("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\customer_statement.py",
+      "line": 180,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "sales = self.controllers['customers'].session.query(Sale).filter(  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\dashboard.py",
+      "line": 205,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "sales = controller.session.query(Sale).filter("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\dashboard.py",
+      "line": 214,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "low_stock = controller.session.query(Product).filter("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\dashboard.py",
+      "line": 219,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "active_customers = controller.session.query(Customer).filter("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\discount_management.py",
+      "line": 462,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "products = self.controller.session.query(Product).filter(  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\enhanced_profiles.py",
+      "line": 445,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "sales = self.controller.session.query(Sale).filter(Sale.customer_id == customer_id).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\enhanced_profiles.py",
+      "line": 487,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "purchases = self.controller.session.query(Purchase).filter(Purchase.supplier_id == supplier_id).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\enhanced_profiles.py",
+      "line": 488,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "products = self.controller.session.query(Product).filter(Product.supplier_id == supplier_id).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\expense_scheduler.py",
+      "line": 304,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "categories = self.controller.session.query("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\inventory.py",
+      "line": 342,
+      "type": "PotentialEnumError",
+      "message": "Potential .value call on string (PostgreSQL stores as VARCHAR)",
+      "code": "location_preference=selected_location.value"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\inventory.py",
+      "line": 341,
+      "type": "PotentialEnumError",
+      "message": "Potential .value call on string (PostgreSQL stores as VARCHAR)",
+      "code": "warehouse_location=selected_location.value if selected_location != InventoryLocation.BOTH else \"\","
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\inventory.py",
+      "line": 223,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "products = self.controller.session.query(Product).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\inventory.py",
+      "line": 316,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "exists = session.query(Product).filter(Product.sku == new_sku).first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\inventory.py",
+      "line": 321,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "exists = session.query(Product).filter(Product.barcode == new_barcode).first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\inventory.py",
+      "line": 440,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "sale_items = self.controller.session.query(SaleItem).filter("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\inventory.py",
+      "line": 445,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "purchase_items = self.controller.session.query(PurchaseItem).filter("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\inventory.py",
+      "line": 467,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "self.controller.session.query(StockMovement).filter("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\inventory.py",
+      "line": 584,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "suppliers = parent_controller.session.query(Supplier).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\inventory_new.py",
+      "line": 142,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "products = self.controller.get_all_products() if hasattr(self.controller, 'get_all_products') else self.controller.session.query(Product).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\inventory_new.py",
+      "line": 269,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "sale_items = self.controller.session.query(SaleItem).filter("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\inventory_new.py",
+      "line": 274,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "purchase_items = self.controller.session.query(PurchaseItem).filter("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\inventory_new.py",
+      "line": 296,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "self.controller.session.query(StockMovement).filter("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\outstanding_purchases.py",
+      "line": 308,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "overdue_purchases = self.controller.session.query(Purchase).join(Supplier).filter(  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\outstanding_purchases.py",
+      "line": 363,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "due_soon_purchases = self.controller.session.query(Purchase).join(Supplier).filter(  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\purchases.py",
+      "line": 33,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "self._all = self.session.query(Supplier).filter(Supplier.is_active == True).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\purchases.py",
+      "line": 63,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "self._all = self.session.query(Product).filter(Product.is_active == True).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\purchases.py",
+      "line": 310,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "supplier = self.controller.session.query(Supplier).get(dialog.selected_id)"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\purchases.py",
+      "line": 562,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "purchases = self.controller.session.query(Purchase).order_by(Purchase.id.desc()).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\reports.py",
+      "line": 213,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "sales_query = controller.session.query(Sale).filter(Sale.sale_date.between(start_date, end_date)).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\reports.py",
+      "line": 223,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "items = controller.session.query(SaleItem, Product).join(Product).filter(SaleItem.sale_id == s.id).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\reports.py",
+      "line": 359,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "q = controller.session.query("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\sales.py",
+      "line": 805,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "product = session.query(Product).filter(  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\sales.py",
+      "line": 813,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "products = session.query(Product).filter(Product.name.ilike(f'%{term}%')).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\sales.py",
+      "line": 823,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "products = session.query(Product).filter(  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\sales.py",
+      "line": 1117,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "products = {p.id: p for p in self.controller.session.query(Product).filter(Product.id.in_(ids)).all()}  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\search_system.py",
+      "line": 618,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "existing_customers = self.controller.session.query(Customer).count()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\search_system.py",
+      "line": 619,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "existing_suppliers = self.controller.session.query(Supplier).count()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\suppliers.py",
+      "line": 355,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "products_count = self.controller.session.query(Product).filter("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\suppliers.py",
+      "line": 360,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "purchases_count = self.controller.session.query(Purchase).filter("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\suppliers.py",
+      "line": 365,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "expenses_count = self.controller.session.query(Expense).filter("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\tax_management.py",
+      "line": 343,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "self.controller.session.query(TaxRate).update({TaxRate.is_default: False})"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\tax_management.py",
+      "line": 370,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "self.controller.session.query(TaxRate).update({TaxRate.is_default: False})"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\tax_management.py",
+      "line": 373,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "tax_rate = self.controller.session.query(TaxRate).filter(TaxRate.name == tax_name).first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\tax_management.py",
+      "line": 427,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "query = self.controller.session.query(Product).filter(Product.is_active == True)  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\tax_management.py",
+      "line": 465,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "sales = self.controller.session.query(Sale).filter(  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\tax_management.py",
+      "line": 547,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "tax_rates = self.controller.session.query(TaxRate).filter(  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\banking\\banking_dashboard.py",
+      "line": 233,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "bank_accounts = session.query(BankAccount).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\banking\\banking_dashboard.py",
+      "line": 274,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "query = session.query(Payment.payment_method, Payment.amount)"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\banking\\banking_dashboard.py",
+      "line": 304,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "query = session.query("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\banking\\bank_accounts.py",
+      "line": 77,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "account = session.query(BankAccount).get(self.account_id)"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\banking\\bank_accounts.py",
+      "line": 142,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "accounts = session.query(BankAccount).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\banking\\bank_accounts.py",
+      "line": 238,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "transaction_count = session.query(BankTransaction)\\"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\banking\\transactions.py",
+      "line": 135,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "accounts = session.query(BankAccount).filter_by(is_active=True).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\banking\\transactions.py",
+      "line": 152,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "account = session.query(BankAccount).get(account_id)"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\banking\\transactions.py",
+      "line": 179,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "transaction = session.query(BankTransaction).get(self.transaction_id)"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\banking\\transactions.py",
+      "line": 315,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "accounts = session.query(BankAccount).filter_by(is_active=True).all()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\banking\\transactions.py",
+      "line": 333,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "query = session.query(BankTransaction)"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\banking\\transactions.py",
+      "line": 448,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "out_account = session.query(BankAccount).get(out_account_id)"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\banking\\transactions.py",
+      "line": 449,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "in_account = session.query(BankAccount).get(in_account_id)"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\banking\\transactions.py",
+      "line": 471,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "account = session.query(BankAccount).get(data['bank_account_id'])"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\banking\\transactions.py",
+      "line": 514,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "account = session.query(BankAccount).get(transaction.bank_account_id)"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\banking\\transactions.py",
+      "line": 560,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "account = session.query(BankAccount).get(transaction.bank_account_id)"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\banking\\transactions.py",
+      "line": 570,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "related = session.query(BankTransaction).get(transaction.related_transaction_id)"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\banking\\transactions.py",
+      "line": 572,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "related_account = session.query(BankAccount).get(related.bank_account_id)"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\dialogs\\receive_purchase_dialog.py",
+      "line": 115,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "items = self.controller.session.query(PurchaseItem).filter(  # TODO: Add .all() or .first()"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\views\\dialogs\\supplier_payment_dialog.py",
+      "line": 173,
+      "type": "MissingErrorHandling",
+      "message": "Database query without try/except block",
+      "code": "outstanding_purchases = self.controllers['inventory'].session.query(Purchase).filter("
+    },
+    {
+      "file": "c:\\POS\\pos_app\\database\\migrations\\v2_add_banking_features.py",
+      "line": 25,
+      "type": "SQLMultiStatement",
+      "message": "Multiple SQL statements without semicolon separators"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\database\\migrations\\v2_add_banking_features.py",
+      "line": 67,
+      "type": "SQLMultiStatement",
+      "message": "Multiple SQL statements without semicolon separators"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\database\\migrations\\v2_add_banking_features.py",
+      "line": 25,
+      "type": "MissingCommit",
+      "message": "DDL/DML statement without commit() - transaction may not persist",
+      "code": "session.execute(text(\"\"\""
+    },
+    {
+      "file": "c:\\POS\\pos_app\\database\\migrations\\v2_add_banking_features.py",
+      "line": 55,
+      "type": "MissingCommit",
+      "message": "DDL/DML statement without commit() - transaction may not persist",
+      "code": "session.execute(text(\"\"\""
+    },
+    {
+      "file": "c:\\POS\\pos_app\\database\\migrations\\v2_add_banking_features.py",
+      "line": 67,
+      "type": "MissingCommit",
+      "message": "DDL/DML statement without commit() - transaction may not persist",
+      "code": "session.execute(text(\"\"\""
+    },
+    {
+      "file": "c:\\POS\\pos_app\\database\\migrations\\v2_add_banking_features.py",
+      "line": 99,
+      "type": "MissingCommit",
+      "message": "DDL/DML statement without commit() - transaction may not persist",
+      "code": "session.execute(text(\"\"\""
+    },
+    {
+      "file": "c:\\POS\\pos_app\\database\\migrations\\v2_add_banking_features.py",
+      "line": 105,
+      "type": "MissingCommit",
+      "message": "DDL/DML statement without commit() - transaction may not persist",
+      "code": "session.execute(text(\"\"\""
+    },
+    {
+      "file": "c:\\POS\\pos_app\\database\\migrations\\v2_add_banking_features.py",
+      "line": 131,
+      "type": "MissingCommit",
+      "message": "DDL/DML statement without commit() - transaction may not persist",
+      "code": "session.execute(text(\"\"\""
+    },
+    {
+      "file": "c:\\POS\\pos_app\\database\\migrations\\v2_add_banking_features.py",
+      "line": 55,
+      "type": "SQLParenthesisMismatch",
+      "message": "Mismatched parentheses in SQL query"
+    },
+    {
+      "file": "c:\\POS\\pos_app\\database\\migrations\\v2_add_banking_features.py",
+      "line": 131,
+      "type": "SQLParenthesisMismatch",
+      "message": "Mismatched parentheses in SQL query"
+    }
+  ],
+  "info": []
+}

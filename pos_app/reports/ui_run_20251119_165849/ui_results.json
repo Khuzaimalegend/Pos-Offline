@@ -1,0 +1,246 @@
+{
+  "start": "20251119_165849",
+  "buttons_tested": [
+    {
+      "path": "MainWindow#/QWidget#/QFrame#/QScrollArea#/QWidget#qt_scrollarea_viewport/QWidget#/QPushButton#",
+      "text": "\ud83d\udcca Dashboard"
+    },
+    {
+      "path": "MainWindow#/QWidget#/QFrame#/QScrollArea#/QWidget#qt_scrollarea_viewport/QWidget#/QPushButton#",
+      "text": "\ud83d\udce6 Products"
+    },
+    {
+      "path": "MainWindow#/QWidget#/QFrame#/QScrollArea#/QWidget#qt_scrollarea_viewport/QWidget#/QPushButton#",
+      "text": "\ud83d\udc65 Customers"
+    },
+    {
+      "path": "MainWindow#/QWidget#/QFrame#/QScrollArea#/QWidget#qt_scrollarea_viewport/QWidget#/QPushButton#",
+      "text": "\ud83c\udfe2 Suppliers"
+    },
+    {
+      "path": "MainWindow#/QWidget#/QFrame#/QScrollArea#/QWidget#qt_scrollarea_viewport/QWidget#/QPushButton#",
+      "text": "\ud83d\udcb0 Sales"
+    },
+    {
+      "path": "MainWindow#/QWidget#/QFrame#/QScrollArea#/QWidget#qt_scrollarea_viewport/QWidget#/QPushButton#",
+      "text": "\ud83d\udecd\ufe0f Purchases"
+    },
+    {
+      "path": "MainWindow#/QWidget#/QFrame#/QScrollArea#/QWidget#qt_scrollarea_viewport/QWidget#/QPushButton#",
+      "text": "\ud83d\udcb3 Finance"
+    },
+    {
+      "path": "MainWindow#/QWidget#/QFrame#/QScrollArea#/QWidget#qt_scrollarea_viewport/QWidget#/QPushButton#",
+      "text": "\ud83d\udcb3 Cust. Payments"
+    },
+    {
+      "path": "MainWindow#/QWidget#/QFrame#/QScrollArea#/QWidget#qt_scrollarea_viewport/QWidget#/QPushButton#",
+      "text": "\ud83d\udcc9 Expenses"
+    },
+    {
+      "path": "MainWindow#/QWidget#/QFrame#/QScrollArea#/QWidget#qt_scrollarea_viewport/QWidget#/QPushButton#",
+      "text": "\ud83d\udcc8 Reports"
+    },
+    {
+      "path": "MainWindow#/QWidget#/QFrame#/QScrollArea#/QWidget#qt_scrollarea_viewport/QWidget#/QPushButton#",
+      "text": "\u2699\ufe0f Settings"
+    },
+    {
+      "path": "MainWindow#/QWidget#/QStackedWidget#card/SettingsWidget#/QTabWidget#/QStackedWidget#qt_tabwidget_stackedwidget/QWidget#/QGroupBox#/QPushButton#",
+      "text": "\ud83d\udd04 Refresh Logs"
+    },
+    {
+      "path": "MainWindow#/QWidget#/QStackedWidget#card/SettingsWidget#/QPushButton#",
+      "text": "\ud83d\udcbe Save Settings"
+    },
+    {
+      "path": "MainWindow#/QWidget#/QStackedWidget#card/SettingsWidget#/QPushButton#",
+      "text": "\ud83d\udd04 Reset to Defaults"
+    },
+    {
+      "path": "MainWindow#/QWidget#/QStackedWidget#card/SettingsWidget#/QPushButton#",
+      "text": "\u2705 Apply Changes"
+    }
+  ],
+  "tabs_tested": [
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/SettingsWidget#/QTabWidget#",
+      "index": 0,
+      "label": "General"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/SettingsWidget#/QTabWidget#",
+      "index": 1,
+      "label": "Appearance"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/SettingsWidget#/QTabWidget#",
+      "index": 2,
+      "label": "Database"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/SettingsWidget#/QTabWidget#",
+      "index": 3,
+      "label": "Backup & Restore"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/SettingsWidget#/QTabWidget#",
+      "index": 4,
+      "label": "Printing"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/SettingsWidget#/QTabWidget#",
+      "index": 5,
+      "label": "Users"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/SettingsWidget#/QTabWidget#",
+      "index": 6,
+      "label": "Notifications"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/SettingsWidget#/QTabWidget#",
+      "index": 7,
+      "label": "Shortcuts"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/SettingsWidget#/QTabWidget#",
+      "index": 8,
+      "label": "\ud83c\udf10 Network"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/SettingsWidget#/QTabWidget#",
+      "index": 9,
+      "label": "System Info"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/ExpensesWidget#/QTabWidget#",
+      "index": 0,
+      "label": "Regular Expenses"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/ExpensesWidget#/QTabWidget#",
+      "index": 1,
+      "label": "Recurring Expenses"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/FinanceDashboardWidget#/QTabWidget#",
+      "index": 0,
+      "label": "\ud83d\udcb5 All Payments"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/FinanceDashboardWidget#/QTabWidget#",
+      "index": 1,
+      "label": "\ud83d\udcca Payment Analytics"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/FinanceDashboardWidget#/QTabWidget#",
+      "index": 2,
+      "label": "\ud83c\udfe6 Banking"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/FinanceDashboardWidget#/QTabWidget#/QStackedWidget#qt_tabwidget_stackedwidget/MainBankingWidget#/QTabWidget#",
+      "index": 0,
+      "label": "\ud83c\udfe6 Banking Dashboard"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/FinanceDashboardWidget#/QTabWidget#/QStackedWidget#qt_tabwidget_stackedwidget/MainBankingWidget#/QTabWidget#",
+      "index": 1,
+      "label": "\ud83c\udfdb\ufe0f Bank Accounts"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/FinanceDashboardWidget#/QTabWidget#/QStackedWidget#qt_tabwidget_stackedwidget/MainBankingWidget#/QTabWidget#",
+      "index": 2,
+      "label": "\ud83d\udcb3 Transactions"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/FinanceDashboardWidget#/QTabWidget#/QStackedWidget#qt_tabwidget_stackedwidget/AllPaymentsWidget#/QTabWidget#",
+      "index": 0,
+      "label": "Customer Payments (Received)"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/FinanceDashboardWidget#/QTabWidget#/QStackedWidget#qt_tabwidget_stackedwidget/AllPaymentsWidget#/QTabWidget#",
+      "index": 1,
+      "label": "Supplier Payments (Paid)"
+    },
+    {
+      "tab_widget": "MainWindow#/QWidget#/QStackedWidget#card/FinanceDashboardWidget#/QTabWidget#/QStackedWidget#qt_tabwidget_stackedwidget/AllPaymentsWidget#/QTabWidget#",
+      "index": 2,
+      "label": "All Payments"
+    }
+  ],
+  "actions_triggered": [],
+  "errors": [
+    {
+      "type": "sales_complete_verification",
+      "error": "Cart not cleared after pressing Enter on Complete Sale"
+    }
+  ],
+  "screenshots": [
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\startup_1763553530188.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_0_1763553530513.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_1_1763553530728.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_2_1763553530945.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_3_1763553531162.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_4_1763553531378.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_5_1763553531596.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_6_1763553531811.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_7_1763553532029.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_8_1763553532244.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_9_1763553532461.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_0_1763553532679.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_1_1763553532894.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_0_1763553533110.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_1_1763553533329.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_2_1763553533545.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_0_1763553533762.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_1_1763553533978.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_2_1763553534195.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_0_1763553534413.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_1_1763553534628.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\tab_2_1763553534844.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\before_click_1763553534919.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\after_click_1763553535178.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\before_click_1763553535232.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\after_click_1763553535511.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\before_click_1763553535564.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\after_click_1763553535844.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\before_click_1763553535893.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\after_click_1763553536161.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\before_click_1763553536212.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\after_click_1763553536510.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\before_click_1763553536564.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\after_click_1763553536861.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\before_click_1763553536913.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\after_click_1763553537311.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\before_click_1763553537360.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\after_click_1763553537627.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\before_click_1763553537677.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\after_click_1763553537943.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\before_click_1763553537992.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\after_click_1763553538261.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\before_click_1763553538311.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\after_click_1763553538593.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\before_click_1763553538644.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\after_click_1763553538910.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\before_click_1763553538960.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\after_click_1763553539576.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\before_click_1763553539640.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\after_click_1763553540242.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\before_click_1763553540293.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\after_click_1763553540909.png",
+    "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\finished_1763553543142.png"
+  ],
+  "key_flows": [
+    {
+      "sales_flow": "OK"
+    },
+    {
+      "sales_keyboard_complete": "UNKNOWN"
+    },
+    {
+      "purchases_new": "OK"
+    }
+  ],
+  "widget_tree": "E:\\POS (3)\\POS (3)\\POS\\pos_app\\reports\\ui_run_20251119_165849\\widget_tree.json"
+}

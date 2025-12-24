@@ -1,0 +1,47 @@
+{
+  "started_at": "2025-12-15T13:09:59",
+  "finished_at": "2025-12-15T13:09:59",
+  "ok": false,
+  "steps": [
+    {
+      "name": "ui_full_app_smoke_summary",
+      "ok": false,
+      "details": "FAILED",
+      "data": {
+        "started_at": "2025-12-15T13:09:59",
+        "finished_at": "2025-12-15T13:09:59",
+        "ok": false,
+        "steps": [
+          {
+            "name": "ui_full_smoke_exception",
+            "ok": false,
+            "details": "No module named 'pos_app'",
+            "data": "Traceback (most recent call last):\n  File \"D:\\Latest POS\\POS (3)\\POS (3)\\POS (3)\\POS\\pos_app\\qa\\run_qa.py\", line 114, in run_ui_full_app_smoke\n    from pos_app.database.connection import Database\nModuleNotFoundError: No module named 'pos_app'\n",
+            "ts": "2025-12-15T13:09:59"
+          }
+        ]
+      },
+      "ts": "2025-12-15T13:09:59"
+    },
+    {
+      "name": "ui_sales_refund_smoke_summary",
+      "ok": false,
+      "details": "FAILED",
+      "data": {
+        "started_at": "2025-12-15T13:09:59",
+        "finished_at": "2025-12-15T13:09:59",
+        "ok": false,
+        "steps": [
+          {
+            "name": "qa_exception",
+            "ok": false,
+            "details": "No module named 'pos_app'",
+            "data": "Traceback (most recent call last):\n  File \"D:\\Latest POS\\POS (3)\\POS (3)\\POS (3)\\POS\\pos_app\\qa\\run_qa.py\", line 253, in run_ui_sales_refund_smoke\n    from pos_app.database.connection import Database\nModuleNotFoundError: No module named 'pos_app'\n",
+            "ts": "2025-12-15T13:09:59"
+          }
+        ]
+      },
+      "ts": "2025-12-15T13:09:59"
+    }
+  ]
+}

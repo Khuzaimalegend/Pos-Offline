@@ -1,0 +1,62 @@
+{
+  "started_at": "2025-12-15T12:30:56",
+  "finished_at": "2025-12-15T12:31:26",
+  "ok": true,
+  "steps": [
+    {
+      "name": "db_connect",
+      "ok": true,
+      "details": "Connected",
+      "data": null,
+      "ts": "2025-12-15T12:30:58"
+    },
+    {
+      "name": "seed_data",
+      "ok": true,
+      "details": "Created supplier/customer/product",
+      "data": {
+        "customer_id": 35,
+        "supplier_id": 53,
+        "product_id": 38,
+        "sale_id": 25,
+        "refund_id": 26
+      },
+      "ts": "2025-12-15T12:30:58"
+    },
+    {
+      "name": "sale_create",
+      "ok": true,
+      "details": "Sale created invoice=4",
+      "data": null,
+      "ts": "2025-12-15T12:31:02"
+    },
+    {
+      "name": "refund_payment_negative",
+      "ok": true,
+      "details": "Payment=-100.0",
+      "data": null,
+      "ts": "2025-12-15T12:31:24"
+    },
+    {
+      "name": "refund_stock",
+      "ok": true,
+      "details": "stock_level=10",
+      "data": null,
+      "ts": "2025-12-15T12:31:24"
+    },
+    {
+      "name": "ui_sales_refund_flow",
+      "ok": true,
+      "details": "Completed",
+      "data": null,
+      "ts": "2025-12-15T12:31:26"
+    },
+    {
+      "name": "cleanup",
+      "ok": true,
+      "details": "Cleanup complete",
+      "data": null,
+      "ts": "2025-12-15T12:31:26"
+    }
+  ]
+}

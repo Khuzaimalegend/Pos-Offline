@@ -1,0 +1,150 @@
+================================================================================
+  POS SYSTEM - QUICK START GUIDE
+================================================================================
+
+OPTION 1: BUILD AND DISTRIBUTE EXE
+================================================================================
+
+Step 1: Install Dependencies
+  Command: pip install -r requirements.txt
+
+Step 2: Build the EXE
+  Command: python build_exe.py
+  
+  This will create:
+  - dist/POSSystem/POSSystem.exe (Main application)
+  - dist/install.bat (Installer script)
+  - dist/uninstall.bat (Uninstaller script)
+
+Step 3: Distribute
+  Option A - Automated Installation:
+    - Copy dist/install.bat to target machine
+    - Run as Administrator
+    - Application installs to C:\Program Files\POSSystem
+  
+  Option B - Portable:
+    - Copy dist/POSSystem folder to target machine
+    - Run POSSystem.exe directly
+    - No installation required
+
+================================================================================
+
+OPTION 2: MIGRATE EXISTING DATABASE
+================================================================================
+
+Step 1: Prepare
+  - Ensure PostgreSQL is running
+  - Backup your database (recommended)
+  - Ensure database.json has correct credentials
+
+Step 2: Run Migration
+  Command: python migration_new_pc.py
+  
+  Or use the batch file:
+  Command: run_migration.bat
+
+Step 3: Verify
+  - Check migration_logs/ folder for logs
+  - Run the application to confirm it works
+
+================================================================================
+
+OPTION 3: RUN APPLICATION DIRECTLY (Development)
+================================================================================
+
+Step 1: Install Dependencies
+  Command: pip install -r requirements.txt
+
+Step 2: Run Application
+  Command: python pos_app/main.py
+
+Step 3: Enter License Key
+  Default: yallahmaA1!23
+
+================================================================================
+
+TROUBLESHOOTING
+================================================================================
+
+Issue: "Python not found"
+Solution: Install Python 3.8+ from https://www.python.org/
+         Make sure to check "Add Python to PATH" during installation
+
+Issue: "psycopg2 not found"
+Solution: pip install psycopg2-binary
+
+Issue: "Cannot connect to database"
+Solution: 
+  1. Ensure PostgreSQL is running
+  2. Check pos_app/config/database.json for correct credentials
+  3. Verify network connectivity
+  4. Run migration script: python migration_new_pc.py
+
+Issue: "License key invalid"
+Solution: Use default key: yallahmaA1!23
+
+Issue: "Build fails"
+Solution:
+  1. Ensure all dependencies are installed: pip install -r requirements.txt
+  2. Run: python build_exe.py
+  3. Check for error messages and install missing packages
+
+================================================================================
+
+FILE DESCRIPTIONS
+================================================================================
+
+build_exe.py
+  - Builds the standalone EXE executable
+  - Creates installer and uninstaller scripts
+  - Generates documentation
+
+migration_new_pc.py
+  - Updates database schema for new application
+  - Adds new columns to existing tables
+  - Preserves all existing data
+  - Creates migration logs
+
+run_migration.bat
+  - Batch file to easily run the migration
+  - Checks Python installation
+  - Runs migration_new_pc.py
+
+requirements.txt
+  - Lists all Python dependencies
+  - Used by: pip install -r requirements.txt
+
+BUILD_AND_MIGRATION_GUIDE.md
+  - Comprehensive guide for building and migration
+  - Detailed troubleshooting steps
+  - Advanced configuration options
+
+================================================================================
+
+NEXT STEPS
+================================================================================
+
+1. Choose your distribution method:
+   - Build EXE for distribution
+   - Or run directly from source
+
+2. If upgrading from old database:
+   - Run: python migration_new_pc.py
+
+3. Run the application:
+   - POSSystem.exe (if built)
+   - Or: python pos_app/main.py
+
+4. Enter license key when prompted:
+   - Default: yallahmaA1!23
+
+5. Application will automatically:
+   - Detect database configuration
+   - Connect to network server if available
+   - Fall back to local or offline mode
+
+================================================================================
+
+For more information, see BUILD_AND_MIGRATION_GUIDE.md
+
+================================================================================

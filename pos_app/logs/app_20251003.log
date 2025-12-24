@@ -1,0 +1,145 @@
+2025-10-03 17:48:35,465 - app - ERROR - Failed to add product from Inventory view
+Traceback (most recent call last):
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: UNIQUE constraint failed: products.sku
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\POS\pos_app\controllers\business_logic.py", line 58, in add_product
+    self.session.commit()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 2032, in commit
+    trans.commit(_to_root=True)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "<string>", line 2, in commit
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 1313, in commit
+    self._prepare_impl()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "<string>", line 2, in _prepare_impl
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 1288, in _prepare_impl
+    self.session.flush()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 4345, in flush
+    self._flush(objects)
+    ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 4480, in _flush
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\util\langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 4441, in _flush
+    flush_context.execute()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\unitofwork.py", line 466, in execute
+    rec.execute(self)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.mapper,
+        ^^^^^^^^^^^^
+        uow.states_for_mapper_hierarchy(self.mapper, False, False),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        uow,
+        ^^^^
+    )
+    ^
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\persistence.py", line 93, in save_obj
+    _emit_insert_statements(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        base_mapper,
+        ^^^^^^^^^^^^
+    ...<3 lines>...
+        insert,
+        ^^^^^^^
+    )
+    ^
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\persistence.py", line 1233, in _emit_insert_statements
+    result = connection.execute(
+        statement,
+        params,
+        execution_options=execution_options,
+    )
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Ashiq Hussain\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: products.sku
+[SQL: INSERT INTO products (name, description, sku, barcode, retail_price, wholesale_price, purchase_price, warehouse_stock, retail_stock, stock_level, reorder_level, max_stock, supplier_id, unit, shelf_location, warehouse_location, brand, model, weight, dimensions, color, size, tax_rate, discount_percentage, profit_margin, is_active, notes, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: ('Watch', 'Item', '12345', '12345', 9999.0, 7000.0, 9999.0, 0, 0, 5, 3, None, 1, 'pcs', '', None, None, None, None, None, None, None, 0.0, 0.0, 0.0, 1, None, '2025-10-03 17:48:35.463826', '2025-10-03 17:48:35.463829')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\POS\pos_app\views\inventory.py", line 207, in show_add_product_dialog
+    self.controller.add_product(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        name=dialog.name_input.text(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        shelf_location=""
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\POS\pos_app\controllers\business_logic.py", line 64, in add_product
+    raise Exception(f"Failed to add product due to data integrity issue: {ie}")
+Exception: Failed to add product due to data integrity issue: (sqlite3.IntegrityError) UNIQUE constraint failed: products.sku
+[SQL: INSERT INTO products (name, description, sku, barcode, retail_price, wholesale_price, purchase_price, warehouse_stock, retail_stock, stock_level, reorder_level, max_stock, supplier_id, unit, shelf_location, warehouse_location, brand, model, weight, dimensions, color, size, tax_rate, discount_percentage, profit_margin, is_active, notes, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: ('Watch', 'Item', '12345', '12345', 9999.0, 7000.0, 9999.0, 0, 0, 5, 3, None, 1, 'pcs', '', None, None, None, None, None, None, None, 0.0, 0.0, 0.0, 1, None, '2025-10-03 17:48:35.463826', '2025-10-03 17:48:35.463829')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)

@@ -1,0 +1,13 @@
+2025-10-03 17:33:12,425 - inventory - INFO - Adding product: Mobile QSmart sku=12345 supplier=1
+2025-10-03 17:33:12,444 - inventory - INFO - Product added id=2
+2025-10-03 17:48:35,463 - inventory - INFO - Adding product: Watch sku=12345 supplier=1
+2025-10-03 17:48:35,464 - inventory - ERROR - IntegrityError adding product: (sqlite3.IntegrityError) UNIQUE constraint failed: products.sku
+[SQL: INSERT INTO products (name, description, sku, barcode, retail_price, wholesale_price, purchase_price, warehouse_stock, retail_stock, stock_level, reorder_level, max_stock, supplier_id, unit, shelf_location, warehouse_location, brand, model, weight, dimensions, color, size, tax_rate, discount_percentage, profit_margin, is_active, notes, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: ('Watch', 'Item', '12345', '12345', 9999.0, 7000.0, 9999.0, 0, 0, 5, 3, None, 1, 'pcs', '', None, None, None, None, None, None, None, 0.0, 0.0, 0.0, 1, None, '2025-10-03 17:48:35.463826', '2025-10-03 17:48:35.463829')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-10-03 17:48:35,465 - inventory - ERROR - Unexpected error in add_product: Failed to add product due to data integrity issue: (sqlite3.IntegrityError) UNIQUE constraint failed: products.sku
+[SQL: INSERT INTO products (name, description, sku, barcode, retail_price, wholesale_price, purchase_price, warehouse_stock, retail_stock, stock_level, reorder_level, max_stock, supplier_id, unit, shelf_location, warehouse_location, brand, model, weight, dimensions, color, size, tax_rate, discount_percentage, profit_margin, is_active, notes, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: ('Watch', 'Item', '12345', '12345', 9999.0, 7000.0, 9999.0, 0, 0, 5, 3, None, 1, 'pcs', '', None, None, None, None, None, None, None, 0.0, 0.0, 0.0, 1, None, '2025-10-03 17:48:35.463826', '2025-10-03 17:48:35.463829')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-10-03 17:50:01,334 - inventory - INFO - Adding product: Watch sku=1234567 supplier=1
+2025-10-03 17:50:01,346 - inventory - INFO - Product added id=3

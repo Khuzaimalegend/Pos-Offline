@@ -1,0 +1,6 @@
+{
+  "use_static_ip": true,
+  "static_ip": "39.58.219.166",
+  "mode": "client",
+  "description": "Network Configuration - Set use_static_ip to true to use static_ip, set mode to \"client\" or \"server\""
+}

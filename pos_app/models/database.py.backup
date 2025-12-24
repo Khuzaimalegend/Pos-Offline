@@ -1,0 +1,472 @@
+from sqlalchemy.schema import Index
+from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, ForeignKey, Boolean, Enum, Text, Table, Date
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship, sessionmaker, scoped_session
+import enum
+from datetime import datetime
+import os
+
+# PostgreSQL Database Configuration
+# Default connection: postgresql://username:password@host:port/database
+DATABASE_URL = os.environ.get(
+    'DATABASE_URL',
+    'postgresql://admin:admin@localhost:5432/pos_network'
+)
+
+# Create engine with PostgreSQL-specific settings
+engine = create_engine(
+    DATABASE_URL,
+    echo=True,
+    future=True,
+    pool_size=10,
+    max_overflow=20,
+    pool_pre_ping=True  # Verify connections before using
+)
+
+# Create a configured "Session" class
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+# Create a scoped session factory
+db_session = scoped_session(SessionLocal)
+
+Base = declarative_base()
+
+# Association tables for many-to-many relationships
+product_category = Table('product_category', Base.metadata,
+    Column('product_id', Integer, ForeignKey('products.id')),
+    Column('category_id', Integer, ForeignKey('categories.id'))
+)
+
+class Category(Base):
+    __tablename__ = 'categories'
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), unique=True, nullable=False)
+    description = Column(String(200))
+    
+    products = relationship("Product", secondary=product_category, back_populates="categories")
+
+class CustomerType(enum.Enum):
+    RETAIL = "RETAIL"
+    WHOLESALE = "WHOLESALE"
+
+class PaymentMethod(enum.Enum):
+    CASH = "CASH"
+    CREDIT_CARD = "CREDIT_CARD"
+    DEBIT_CARD = "DEBIT_CARD"
+    BANK_TRANSFER = "BANK_TRANSFER"
+    CREDIT = "CREDIT"
+
+class PaymentStatus(enum.Enum):
+    PENDING = "PENDING"
+    COMPLETED = "COMPLETED"
+    PARTIAL = "PARTIAL"
+    CANCELLED = "CANCELLED"
+
+class SaleStatus(enum.Enum):
+    DRAFT = "DRAFT"
+    COMPLETED = "COMPLETED"
+    CANCELLED = "CANCELLED"
+    REFUNDED = "REFUNDED"
+
+class DiscountType(enum.Enum):
+    PERCENTAGE = "PERCENTAGE"
+    FIXED_AMOUNT = "FIXED_AMOUNT"
+
+class ExpenseFrequency(enum.Enum):
+    ONE_TIME = "ONE_TIME"
+    DAILY = "DAILY"
+    WEEKLY = "WEEKLY"
+    MONTHLY = "MONTHLY"
+    QUARTERLY = "QUARTERLY"
+    YEARLY = "YEARLY"
+
+class InventoryLocation(enum.Enum):
+    WAREHOUSE = "WAREHOUSE"
+    RETAIL = "RETAIL"
+    BOTH = "BOTH"
+
+class Customer(Base):
+    __tablename__ = 'customers'
+    
+    id = Column(Integer, primary_key=True)
+    code = Column(String(20), unique=True)  # Customer unique code
+    name = Column(String(100), nullable=False)
+    type = Column(String(20))  # Changed from Enum to String - stores 'RETAIL' or 'WHOLESALE'
+    contact = Column(String(50))
+    email = Column(String(100))
+    address = Column(String(200))
+    city = Column(String(50))
+    state = Column(String(50))
+    postal_code = Column(String(20))
+    country = Column(String(50))
+    tax_number = Column(String(50))  # For business customers
+    credit_limit = Column(Float, default=0.0)
+    current_credit = Column(Float, default=0.0)
+    # Enhanced customer details
+    business_name = Column(String(200))
+    contact_person = Column(String(100))
+    phone_secondary = Column(String(50))
+    website = Column(String(200))
+    payment_terms = Column(String(200))
+    discount_percentage = Column(Float, default=0.0)
+    notes = Column(Text)
+    created_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    is_active = Column(Boolean, default=True)
+    
+    sales = relationship("Sale", back_populates="customer")
+    payments = relationship("Payment", back_populates="customer")
+
+# Search indexes for customers
+Index('ix_customers_name', Customer.name)
+Index('ix_customers_contact', Customer.contact)
+
+class Supplier(Base):
+    __tablename__ = 'suppliers'
+    
+    id = Column(Integer, primary_key=True)
+    code = Column(String(20), unique=True)  # Supplier unique code
+    name = Column(String(100), nullable=False)
+    contact_person = Column(String(100))
+    contact = Column(String(50))
+    email = Column(String(100))
+    address = Column(String(200))
+    city = Column(String(50))
+    state = Column(String(50))
+    postal_code = Column(String(20))
+    country = Column(String(50))
+    tax_number = Column(String(50))
+    payment_terms = Column(String(200))  # Payment terms and conditions
+    # Enhanced supplier details
+    business_name = Column(String(200))
+    phone_secondary = Column(String(50))
+    website = Column(String(200))
+    bank_name = Column(String(100))
+    bank_account = Column(String(50))
+    bank_routing = Column(String(50))
+    credit_limit = Column(Float, default=0.0)
+    discount_percentage = Column(Float, default=0.0)
+    notes = Column(Text)
+    created_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    is_active = Column(Boolean, default=True)
+    
+    products = relationship("Product", back_populates="supplier")
+    purchases = relationship("Purchase", back_populates="supplier")
+
+# Search indexes for suppliers
+Index('ix_suppliers_name', Supplier.name)
+Index('ix_suppliers_contact', Supplier.contact)
+
+class Product(Base):
+    __tablename__ = 'products'
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=False)
+    description = Column(String(200))
+    sku = Column(String(50), unique=True)
+    barcode = Column(String(50), unique=True)
+    retail_price = Column(Float, nullable=False)
+    wholesale_price = Column(Float, nullable=False)
+    purchase_price = Column(Float, nullable=False)
+    # Separate warehouse and retail stock
+    warehouse_stock = Column(Integer, default=0)
+    retail_stock = Column(Integer, default=0)
+    stock_level = Column(Integer, default=0)  # Total stock (computed)
+    reorder_level = Column(Integer, default=10)
+    max_stock = Column(Integer)
+    supplier_id = Column(Integer, ForeignKey('suppliers.id'))
+    unit = Column(String(20))  # e.g., pieces, kg, liters
+    shelf_location = Column(String(50))
+    warehouse_location = Column(String(50))
+    # Enhanced product details
+    brand = Column(String(100))
+    model = Column(String(100))
+    weight = Column(Float)
+    dimensions = Column(String(100))
+    color = Column(String(50))
+    size = Column(String(50))
+    tax_rate = Column(Float, default=0.0)
+    discount_percentage = Column(Float, default=0.0)
+    profit_margin = Column(Float, default=0.0)  # Calculated field
+    is_active = Column(Boolean, default=True)
+    notes = Column(Text)
+    created_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    
+    supplier = relationship("Supplier", back_populates="products")
+    categories = relationship("Category", secondary=product_category, back_populates="products")
+    stock_movements = relationship("StockMovement", back_populates="product")
+    sale_items = relationship("SaleItem", back_populates="product")
+
+# Search indexes for products
+Index('ix_products_name', Product.name)
+Index('ix_products_sku', Product.sku)
+Index('ix_products_barcode', Product.barcode)
+
+class StockMovement(Base):
+    __tablename__ = 'stock_movements'
+    
+    id = Column(Integer, primary_key=True)
+    product_id = Column(Integer, ForeignKey('products.id'))
+    date = Column(DateTime, default=datetime.now)
+    movement_type = Column(String(20))  # IN, OUT, ADJUSTMENT, TRANSFER
+    quantity = Column(Float)  # Changed to Float to match database
+    location = Column(String(20))  # Changed from Enum to String - WAREHOUSE, RETAIL
+    reference = Column(String(50))  # Purchase/Sale/Adjustment reference
+    notes = Column(Text)
+    
+    product = relationship("Product", back_populates="stock_movements")
+
+class Sale(Base):
+    __tablename__ = 'sales'
+    
+    id = Column(Integer, primary_key=True)
+    invoice_number = Column(String(20), unique=True)
+    customer_id = Column(Integer, ForeignKey('customers.id'))
+    subtotal = Column(Float, nullable=False)
+    tax_amount = Column(Float, default=0.0)
+    discount_amount = Column(Float, default=0.0)
+    discount_type = Column(String(20))  # Changed from Enum to String
+    total_amount = Column(Float, nullable=False)
+    paid_amount = Column(Float, default=0.0)
+    sale_date = Column(DateTime, default=datetime.now)
+    due_date = Column(DateTime)
+    status = Column(String(20))  # Changed from Enum to String
+    is_wholesale = Column(Boolean, default=False)
+    payment_method = Column(String(20))  # Changed from Enum to String
+    notes = Column(Text)
+    created_by = Column(String(50))
+    
+    customer = relationship("Customer", back_populates="sales")
+    items = relationship("SaleItem", back_populates="sale", cascade="all, delete-orphan")
+    payments = relationship("Payment", back_populates="sale")
+
+class SaleItem(Base):
+    __tablename__ = 'sale_items'
+    
+    id = Column(Integer, primary_key=True)
+    sale_id = Column(Integer, ForeignKey('sales.id'))
+    product_id = Column(Integer, ForeignKey('products.id'))
+    quantity = Column(Float, nullable=False)  # Changed to Float to match database
+    unit_price = Column(Float, nullable=False)
+    discount = Column(Float, default=0.0)
+    discount_type = Column(String(20))  # Changed from Enum to String
+    total = Column(Float, nullable=False)
+    created_at = Column(DateTime, default=datetime.now)  # Added to match database
+    
+    sale = relationship("Sale", back_populates="items")
+    product = relationship("Product", back_populates="sale_items")
+
+class Payment(Base):
+    __tablename__ = 'payments'
+    
+    id = Column(Integer, primary_key=True)
+    sale_id = Column(Integer, ForeignKey('sales.id'))
+    customer_id = Column(Integer, ForeignKey('customers.id'))
+    amount = Column(Float, nullable=False)
+    payment_date = Column(DateTime, default=datetime.now)
+    payment_method = Column(String(20))  
+    status = Column(String(20))  
+    reference = Column(String(100))  
+    notes = Column(Text)
+    
+    sale = relationship("Sale", back_populates="payments")
+    customer = relationship("Customer", back_populates="payments")
+
+class Purchase(Base):
+    __tablename__ = 'purchases'
+    
+    id = Column(Integer, primary_key=True)
+    supplier_id = Column(Integer, ForeignKey('suppliers.id'))
+    purchase_number = Column(String(20), unique=True)
+    order_date = Column(DateTime, default=datetime.now)
+    delivery_date = Column(DateTime)
+    expected_delivery = Column(DateTime)
+    total_amount = Column(Float, nullable=False)
+    paid_amount = Column(Float, default=0.0)
+    tax_amount = Column(Float, default=0.0)
+    discount_amount = Column(Float, default=0.0)
+    status = Column(String(20))  # ORDERED, RECEIVED, CANCELLED, PARTIAL
+    priority = Column(String(20), default="NORMAL")  # LOW, NORMAL, HIGH, URGENT
+    notes = Column(Text)
+    created_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    
+    supplier = relationship("Supplier", back_populates="purchases")
+    items = relationship("PurchaseItem", back_populates="purchase", cascade="all, delete-orphan")
+    payments = relationship("PurchasePayment", back_populates="purchase")
+
+class PurchasePayment(Base):
+    __tablename__ = 'purchase_payments'
+
+    id = Column(Integer, primary_key=True)
+    purchase_id = Column(Integer, ForeignKey('purchases.id'))
+    supplier_id = Column(Integer, ForeignKey('suppliers.id'))
+    amount = Column(Float, nullable=False)
+    payment_date = Column(DateTime, default=datetime.now)
+    payment_method = Column(Enum(PaymentMethod))
+    status = Column(Enum(PaymentStatus), default=PaymentStatus.COMPLETED)
+    reference = Column(String(100))
+    # bank_account_id = Column(Integer, ForeignKey('bank_accounts.id'))  # TODO: Add this column to database
+    notes = Column(Text)
+
+    purchase = relationship("Purchase", back_populates="payments")
+    supplier = relationship("Supplier")
+    # bank_account = relationship("BankAccount")  # TODO: Re-enable after adding column
+
+class PurchaseItem(Base):
+    __tablename__ = 'purchase_items'
+    
+    id = Column(Integer, primary_key=True)
+    purchase_id = Column(Integer, ForeignKey('purchases.id'))
+    product_id = Column(Integer, ForeignKey('products.id'))
+    quantity = Column(Float, nullable=False)  # Changed to Float to match database
+    unit_cost = Column(Float, nullable=False)
+    received_quantity = Column(Float)  # Changed to Float to match database
+    total_cost = Column(Float, nullable=False)
+    created_at = Column(DateTime, default=datetime.now)  # Added to match database
+    
+    purchase = relationship("Purchase", back_populates="items")
+    product = relationship("Product")
+
+# New Models for Enhanced Features
+
+class BankAccount(Base):
+    __tablename__ = 'bank_accounts'
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=False)  # Changed from account_name to match schema
+    account_number = Column(String(50))  # Removed nullable=False to match schema
+    bank_name = Column(String(100))  # Removed nullable=False to match schema
+    current_balance = Column(Float)  # Removed default to match schema
+    is_active = Column(Boolean)  # Removed default to match schema
+    created_at = Column(DateTime)  # Removed default to match schema
+    updated_at = Column(DateTime)  # Added to match schema
+
+class BankTransaction(Base):
+    __tablename__ = 'bank_transactions'
+    
+    id = Column(Integer, primary_key=True)
+    bank_account_id = Column(Integer, ForeignKey('bank_accounts.id'))
+    amount = Column(Float, nullable=False)
+    balance_after = Column(Float, nullable=False)
+    transaction_type = Column(String(20), nullable=False)  # DEPOSIT, WITHDRAWAL, TRANSFER
+    description = Column(String(200))
+    reference = Column(String(100))
+    transaction_date = Column(DateTime)  # Removed default to match schema
+    created_at = Column(DateTime)  # Added to match schema
+    
+    bank_account = relationship("BankAccount")
+
+class Expense(Base):
+    __tablename__ = 'expenses'
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String(200), nullable=False)
+    amount = Column(Float, nullable=False)
+    expense_date = Column(DateTime, default=datetime.now)
+    category = Column(String(100))
+    subcategory = Column(String(100))
+    frequency = Column(String(20))  # Changed from Enum to String
+    is_recurring = Column(Boolean, default=False)
+    next_due_date = Column(DateTime)
+    bank_account_id = Column(Integer, ForeignKey('bank_accounts.id'))
+    supplier_id = Column(Integer, ForeignKey('suppliers.id'))
+    payment_method = Column(String(20))  # Changed from Enum to String - uses PostgreSQL ENUM type in DB
+    reference = Column(String(100))
+    notes = Column(Text)
+    created_by = Column(String(50))
+    created_at = Column(DateTime, default=datetime.now)
+    
+    bank_account = relationship("BankAccount")
+    supplier = relationship("Supplier")
+
+class ExpenseSchedule(Base):
+    __tablename__ = 'expense_schedules'
+    
+    id = Column(Integer, primary_key=True)
+    expense_id = Column(Integer, ForeignKey('expenses.id'))
+    scheduled_date = Column(DateTime, nullable=False)
+    amount = Column(Float, nullable=False)
+    status = Column(String(20), default="PENDING")  # PENDING, PAID, SKIPPED
+    paid_date = Column(DateTime)
+    notes = Column(Text)
+    
+    expense = relationship("Expense")
+
+class Discount(Base):
+    __tablename__ = 'discounts'
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=False)
+    description = Column(Text)  # Changed from String(200) to Text to match schema
+    discount_type = Column(String(20), nullable=False)  # Changed from Enum - uses PostgreSQL ENUM in DB
+    discount_value = Column(Float, nullable=False)  # Changed from 'value' to match schema
+    min_amount = Column(Float)  # Removed default to match schema
+    max_amount = Column(Float)  # Changed from max_discount to match schema
+    start_date = Column(DateTime)
+    end_date = Column(DateTime)
+    is_active = Column(Boolean)  # Removed default to match schema
+    created_at = Column(DateTime)  # Removed default to match schema
+    updated_at = Column(DateTime)  # Added to match schema
+
+class TaxRate(Base):
+    __tablename__ = 'tax_rates'
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=False)
+    rate = Column(Float, nullable=False)  # Tax rate as percentage
+    description = Column(String(200))
+    is_default = Column(Boolean, default=False)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.now)
+
+class OutstandingPurchase(Base):
+    __tablename__ = 'outstanding_purchases'
+    
+    id = Column(Integer, primary_key=True)
+    purchase_id = Column(Integer, ForeignKey('purchases.id'))
+    supplier_id = Column(Integer, ForeignKey('suppliers.id'))
+    amount_due = Column(Float, nullable=False)
+    due_date = Column(DateTime)
+    days_overdue = Column(Integer, default=0)
+    priority = Column(String(20), default="NORMAL")
+    follow_up_date = Column(DateTime)
+    notes = Column(Text)
+    created_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    
+    purchase = relationship("Purchase")
+    supplier = relationship("Supplier")
+
+class CustomerReport(Base):
+    __tablename__ = 'customer_reports'
+    
+    id = Column(Integer, primary_key=True)
+    customer_id = Column(Integer, ForeignKey('customers.id'))
+    report_date = Column(DateTime, default=datetime.now)
+    total_sales = Column(Float, default=0.0)
+    total_payments = Column(Float, default=0.0)
+    outstanding_amount = Column(Float, default=0.0)
+    last_sale_date = Column(DateTime)
+    last_payment_date = Column(DateTime)
+    total_transactions = Column(Integer, default=0)
+    average_order_value = Column(Float, default=0.0)
+    notes = Column(Text)
+    
+    customer = relationship("Customer")
+
+class User(Base):
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True)
+    username = Column(String(50), unique=True, nullable=False)
+    password_hash = Column(String(200), nullable=False)
+    full_name = Column(String(100))
+    email = Column(String(100))
+    is_admin = Column(Boolean, default=False)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.now)
+

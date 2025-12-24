@@ -1,0 +1,14 @@
+{
+    "username": "admin",
+    "password": "admin",
+    "port": "5432",
+    "database": "pos_network",
+    "connection_settings": {
+        "pool_size": 5,
+        "max_overflow": 10,
+        "pool_timeout": 30,
+        "pool_recycle": 3600,
+        "connect_timeout": 10
+    },
+    "description": "Dynamic network configuration - host is determined at runtime"
+}

@@ -1,0 +1,12 @@
+2025-12-09 21:56:00,260 - app - INFO - Cached credentials for user: admin
+2025-12-09 21:58:09,572 - app - ERROR - Failed to cache user credentials: type object 'Path' has no attribute 'ctime'
+2025-12-09 21:59:30,981 - app - INFO - Cached credentials for user: ali
+2025-12-09 22:04:15,874 - app - INFO - Cached credentials for user: ali
+2025-12-09 22:06:35,104 - app - INFO - Cached credentials for user: ali
+2025-12-09 22:12:41,513 - app - INFO - Cached credentials for user: admin
+2025-12-09 22:17:46,391 - app - INFO - Cached credentials for user: admin
+2025-12-09 22:21:56,940 - app - INFO - Cached credentials for user: ali
+2025-12-09 22:22:54,093 - app - INFO - Cached credentials for user: admin
+2025-12-09 22:53:33,132 - app - INFO - Cached credentials for user: admin
+2025-12-09 22:56:03,033 - app - INFO - Cached credentials for user: ali
+2025-12-09 22:56:51,167 - app - INFO - Cached credentials for user: ali

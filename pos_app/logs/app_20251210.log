@@ -1,0 +1,40 @@
+2025-12-10 14:48:07,618 - app - WARNING - Server authentication failed: (psycopg2.OperationalError) connection to server at "192.168.1.2", port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-12-10 14:48:07,619 - app - INFO - Attempting local authentication for user: admin
+2025-12-10 14:48:07,621 - app - WARNING - Invalid password for user: admin
+2025-12-10 14:48:14,481 - app - WARNING - Server authentication failed: (psycopg2.OperationalError) connection to server at "192.168.1.2", port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-12-10 14:48:14,483 - app - INFO - Attempting local authentication for user: admin
+2025-12-10 14:48:14,485 - app - INFO - User authenticated locally: admin
+2025-12-10 14:52:13,884 - app - WARNING - Server authentication failed: (psycopg2.OperationalError) connection to server at "192.168.1.2", port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-12-10 14:52:13,885 - app - INFO - Attempting local authentication for user: admin
+2025-12-10 14:52:13,886 - app - WARNING - Invalid password for user: admin
+2025-12-10 14:52:22,492 - app - WARNING - Server authentication failed: (psycopg2.OperationalError) connection to server at "192.168.1.2", port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-12-10 14:52:22,493 - app - INFO - Attempting local authentication for user: admin
+2025-12-10 14:52:22,494 - app - INFO - User authenticated locally: admin
+2025-12-10 14:53:50,630 - app - WARNING - Server authentication failed: (psycopg2.OperationalError) connection to server at "192.168.1.2", port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-12-10 14:53:50,631 - app - INFO - Attempting local authentication for user: admin
+2025-12-10 14:53:50,632 - app - WARNING - Invalid password for user: admin
+2025-12-10 14:53:59,655 - app - WARNING - Server authentication failed: (psycopg2.OperationalError) connection to server at "192.168.1.2", port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-12-10 14:53:59,656 - app - INFO - Attempting local authentication for user: admin
+2025-12-10 14:53:59,657 - app - INFO - User authenticated locally: admin
+2025-12-10 15:14:09,183 - app - INFO - Cached credentials for user: admin
+2025-12-10 15:33:32,633 - app - INFO - Cached credentials for user: ali
+2025-12-10 17:33:42,229 - app - INFO - Admin user logged in successfully
+2025-12-10 18:42:14,973 - app - INFO - Admin user logged in successfully

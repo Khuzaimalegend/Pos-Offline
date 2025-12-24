@@ -1,0 +1,6 @@
+2025-10-29 16:43:02,500 - app - ERROR - Error recording supplier payment
+Traceback (most recent call last):
+  File "C:\POS\pos_app\views\dialogs\supplier_payment_dialog.py", line 160, in record_payment
+    payment_date = self.payment_date_input.date().toPyDate()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'PySide6.QtCore.QDate' object has no attribute 'toPyDate'

@@ -1,0 +1,4 @@
+2025-12-17 18:17:44,144 - inventory - INFO - Adding product: dsddddddddddd sku=dddddddddddddd supplier=1
+2025-12-17 18:17:44,171 - inventory - INFO - Product added id=57
+2025-12-17 20:47:36,840 - inventory - INFO - Adding product: Testing Product sku=far001 supplier=52
+2025-12-17 20:47:50,224 - inventory - INFO - Product added id=61

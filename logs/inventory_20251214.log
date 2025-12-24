@@ -1,0 +1,348 @@
+2025-12-14 22:38:57,833 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 22:38:57,844 - inventory - INFO - Product added id=1
+2025-12-14 22:38:57,852 - inventory - INFO - Adding product: Auto SKU Product sku=PX4IGWX4T supplier=1
+2025-12-14 22:38:57,855 - inventory - INFO - Product added id=1
+2025-12-14 22:38:57,862 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 22:38:57,864 - inventory - INFO - Product added id=1
+2025-12-14 22:38:57,869 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 22:38:57,874 - inventory - INFO - Product added id=1
+2025-12-14 22:38:58,549 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 22:38:58,551 - inventory - INFO - Product added id=2
+2025-12-14 22:39:51,035 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 22:39:51,044 - inventory - INFO - Product added id=1
+2025-12-14 22:39:51,053 - inventory - INFO - Adding product: Auto SKU Product sku=PJTFEH2YH supplier=1
+2025-12-14 22:39:51,056 - inventory - INFO - Product added id=1
+2025-12-14 22:39:51,063 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 22:39:51,064 - inventory - INFO - Product added id=1
+2025-12-14 22:39:51,069 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 22:39:51,073 - inventory - INFO - Product added id=1
+2025-12-14 22:39:51,324 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 22:39:51,326 - inventory - INFO - Product added id=2
+2025-12-14 22:40:31,818 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 22:40:31,827 - inventory - INFO - Product added id=1
+2025-12-14 22:40:31,836 - inventory - INFO - Adding product: Auto SKU Product sku=P5SWMS6WH supplier=1
+2025-12-14 22:40:31,837 - inventory - INFO - Product added id=1
+2025-12-14 22:40:31,845 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 22:40:31,846 - inventory - INFO - Product added id=1
+2025-12-14 22:40:31,852 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 22:40:31,854 - inventory - INFO - Product added id=1
+2025-12-14 22:41:03,475 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 22:41:03,483 - inventory - INFO - Product added id=1
+2025-12-14 22:41:03,491 - inventory - INFO - Adding product: Auto SKU Product sku=PCHF7MR9Z supplier=1
+2025-12-14 22:41:03,493 - inventory - INFO - Product added id=1
+2025-12-14 22:41:03,498 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 22:41:03,500 - inventory - INFO - Product added id=1
+2025-12-14 22:41:03,506 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 22:41:03,509 - inventory - INFO - Product added id=1
+2025-12-14 22:41:03,720 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 22:41:03,722 - inventory - INFO - Product added id=2
+2025-12-14 22:41:04,012 - inventory - INFO - Adding product: UnitTestProduct sku=PEGJ0TRUC supplier=1
+2025-12-14 22:41:04,034 - inventory - INFO - Product added id=6
+2025-12-14 22:41:04,261 - inventory - INFO - Adding product: PTest sku=PXG2NV19S supplier=2
+2025-12-14 22:41:04,267 - inventory - INFO - Product added id=7
+2025-12-14 22:43:37,044 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 22:43:37,052 - inventory - INFO - Product added id=1
+2025-12-14 22:43:37,059 - inventory - INFO - Adding product: Auto SKU Product sku=PATWGGZEI supplier=1
+2025-12-14 22:43:37,061 - inventory - INFO - Product added id=1
+2025-12-14 22:43:37,068 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 22:43:37,071 - inventory - INFO - Product added id=1
+2025-12-14 22:43:37,076 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 22:43:37,077 - inventory - INFO - Product added id=1
+2025-12-14 22:43:37,302 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 22:43:37,303 - inventory - INFO - Product added id=2
+2025-12-14 22:43:37,531 - inventory - INFO - Adding product: UnitTestProduct sku=PWIZ5W336 supplier=1
+2025-12-14 22:43:37,542 - inventory - INFO - Product added id=8
+2025-12-14 22:43:38,174 - inventory - INFO - Adding product: PTest sku=PIBHVPZHG supplier=4
+2025-12-14 22:43:38,178 - inventory - INFO - Product added id=9
+2025-12-14 22:46:56,955 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 22:46:56,963 - inventory - INFO - Product added id=1
+2025-12-14 22:46:56,971 - inventory - INFO - Adding product: Auto SKU Product sku=P5F3JCNB2 supplier=1
+2025-12-14 22:46:56,973 - inventory - INFO - Product added id=1
+2025-12-14 22:46:56,977 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 22:46:56,978 - inventory - INFO - Product added id=1
+2025-12-14 22:46:56,986 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 22:46:56,988 - inventory - INFO - Product added id=1
+2025-12-14 22:46:57,200 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 22:46:57,201 - inventory - INFO - Product added id=2
+2025-12-14 22:46:57,539 - inventory - INFO - Adding product: UnitTestProduct sku=PXD5B4KZV supplier=1
+2025-12-14 22:46:57,551 - inventory - INFO - Product added id=10
+2025-12-14 22:46:58,210 - inventory - INFO - Adding product: PTest sku=PGFTVACJB supplier=6
+2025-12-14 22:46:58,216 - inventory - INFO - Product added id=11
+2025-12-14 22:47:10,248 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 22:47:10,257 - inventory - INFO - Product added id=1
+2025-12-14 22:47:10,266 - inventory - INFO - Adding product: Auto SKU Product sku=P5X3QL2UR supplier=1
+2025-12-14 22:47:10,269 - inventory - INFO - Product added id=1
+2025-12-14 22:47:10,273 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 22:47:10,276 - inventory - INFO - Product added id=1
+2025-12-14 22:47:10,282 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 22:47:10,285 - inventory - INFO - Product added id=1
+2025-12-14 22:47:10,530 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 22:47:10,535 - inventory - INFO - Product added id=2
+2025-12-14 22:47:10,785 - inventory - INFO - Adding product: UnitTestProduct sku=PCDR8SI7D supplier=1
+2025-12-14 22:47:10,796 - inventory - INFO - Product added id=12
+2025-12-14 22:47:11,023 - inventory - INFO - Adding product: PTest sku=PBLVL8DZU supplier=8
+2025-12-14 22:47:11,029 - inventory - INFO - Product added id=13
+2025-12-14 22:47:36,347 - inventory - INFO - Adding product: UnitTestProduct sku=PAM1BDJPE supplier=1
+2025-12-14 22:47:36,359 - inventory - INFO - Product added id=14
+2025-12-14 22:47:45,641 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 22:47:45,649 - inventory - INFO - Product added id=1
+2025-12-14 22:47:45,657 - inventory - INFO - Adding product: Auto SKU Product sku=P71NTSKLT supplier=1
+2025-12-14 22:47:45,659 - inventory - INFO - Product added id=1
+2025-12-14 22:47:45,665 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 22:47:45,668 - inventory - INFO - Product added id=1
+2025-12-14 22:47:45,674 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 22:47:45,676 - inventory - INFO - Product added id=1
+2025-12-14 22:47:45,896 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 22:47:45,899 - inventory - INFO - Product added id=2
+2025-12-14 22:47:46,131 - inventory - INFO - Adding product: UnitTestProduct sku=PZLRWP34F supplier=1
+2025-12-14 22:47:46,142 - inventory - INFO - Product added id=15
+2025-12-14 22:47:46,406 - inventory - INFO - Adding product: PTest sku=PI7NM7P1E supplier=10
+2025-12-14 22:47:46,410 - inventory - INFO - Product added id=16
+2025-12-14 22:48:19,270 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 22:48:19,278 - inventory - INFO - Product added id=1
+2025-12-14 22:48:19,284 - inventory - INFO - Adding product: Auto SKU Product sku=PEH1XN8DW supplier=1
+2025-12-14 22:48:19,288 - inventory - INFO - Product added id=1
+2025-12-14 22:48:19,292 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 22:48:19,294 - inventory - INFO - Product added id=1
+2025-12-14 22:48:19,299 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 22:48:19,300 - inventory - INFO - Product added id=1
+2025-12-14 22:48:19,498 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 22:48:19,499 - inventory - INFO - Product added id=2
+2025-12-14 22:48:19,568 - inventory - INFO - Adding product: UnitTestProduct sku=PV2RC28S5 supplier=1
+2025-12-14 22:48:19,571 - inventory - INFO - Product added id=1
+2025-12-14 22:48:20,010 - inventory - INFO - Adding product: PTest sku=PWJ9QR6IB supplier=12
+2025-12-14 22:48:20,042 - inventory - INFO - Product added id=17
+2025-12-14 22:53:49,700 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 22:53:49,707 - inventory - INFO - Product added id=1
+2025-12-14 22:53:49,713 - inventory - INFO - Adding product: Auto SKU Product sku=PZPN97J6D supplier=1
+2025-12-14 22:53:49,715 - inventory - INFO - Product added id=1
+2025-12-14 22:53:49,720 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 22:53:49,722 - inventory - INFO - Product added id=1
+2025-12-14 22:53:49,726 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 22:53:49,728 - inventory - INFO - Product added id=1
+2025-12-14 22:53:49,917 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 22:53:49,919 - inventory - INFO - Product added id=2
+2025-12-14 22:53:49,980 - inventory - INFO - Adding product: UnitTestProduct sku=PEVJU6IJT supplier=1
+2025-12-14 22:53:49,982 - inventory - INFO - Product added id=1
+2025-12-14 22:53:50,327 - inventory - INFO - Adding product: PTest sku=PN3FJJJN2 supplier=14
+2025-12-14 22:53:50,337 - inventory - INFO - Product added id=18
+2025-12-14 22:53:54,047 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 22:53:54,059 - inventory - INFO - Product added id=1
+2025-12-14 22:53:54,069 - inventory - INFO - Adding product: Auto SKU Product sku=PKO1TSAB7 supplier=1
+2025-12-14 22:53:54,071 - inventory - INFO - Product added id=1
+2025-12-14 22:53:54,077 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 22:53:54,079 - inventory - INFO - Product added id=1
+2025-12-14 22:53:54,085 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 22:53:54,087 - inventory - INFO - Product added id=1
+2025-12-14 22:53:54,345 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 22:53:54,347 - inventory - INFO - Product added id=2
+2025-12-14 22:53:58,103 - inventory - INFO - Adding product: UnitTestProduct sku=PZWSUJ41D supplier=1
+2025-12-14 22:53:58,109 - inventory - INFO - Product added id=1
+2025-12-14 22:54:15,918 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 22:54:15,945 - inventory - INFO - Product added id=1
+2025-12-14 22:54:15,961 - inventory - INFO - Adding product: Auto SKU Product sku=PF64MAI0V supplier=1
+2025-12-14 22:54:15,966 - inventory - INFO - Product added id=1
+2025-12-14 22:54:15,980 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 22:54:15,982 - inventory - INFO - Product added id=1
+2025-12-14 22:54:15,992 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 22:54:15,995 - inventory - INFO - Product added id=1
+2025-12-14 22:54:16,371 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 22:54:16,374 - inventory - INFO - Product added id=2
+2025-12-14 22:54:16,516 - inventory - INFO - Adding product: UnitTestProduct sku=P223G69F8 supplier=1
+2025-12-14 22:54:16,521 - inventory - INFO - Product added id=1
+2025-12-14 22:54:17,009 - inventory - INFO - Adding product: PTest sku=PJVSAO66V supplier=16
+2025-12-14 22:54:17,023 - inventory - INFO - Product added id=19
+2025-12-14 23:30:46,470 - inventory - INFO - Adding product: Product 2 sku=PROD2 supplier=1
+2025-12-14 23:30:46,477 - inventory - INFO - Product added id=2
+2025-12-14 23:30:54,770 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 23:30:54,777 - inventory - INFO - Product added id=1
+2025-12-14 23:30:54,788 - inventory - INFO - Adding product: Auto SKU Product sku=P86PLZIO9 supplier=1
+2025-12-14 23:30:54,789 - inventory - INFO - Product added id=1
+2025-12-14 23:30:54,795 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 23:30:54,797 - inventory - INFO - Product added id=1
+2025-12-14 23:30:54,802 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 23:30:54,804 - inventory - INFO - Product added id=1
+2025-12-14 23:30:54,986 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 23:30:54,988 - inventory - INFO - Product added id=2
+2025-12-14 23:30:55,052 - inventory - INFO - Adding product: UnitTestProduct sku=PJR3D7WNU supplier=1
+2025-12-14 23:30:55,053 - inventory - INFO - Product added id=1
+2025-12-14 23:30:55,307 - inventory - INFO - Adding product: Product 2 sku=PROD2 supplier=1
+2025-12-14 23:30:55,309 - inventory - INFO - Product added id=2
+2025-12-14 23:30:55,587 - inventory - INFO - Adding product: PTest sku=P6GSKOAOP supplier=18
+2025-12-14 23:30:55,598 - inventory - INFO - Product added id=20
+2025-12-14 23:31:03,184 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 23:31:03,191 - inventory - INFO - Product added id=1
+2025-12-14 23:31:03,203 - inventory - INFO - Adding product: Auto SKU Product sku=PQJ7NLCG9 supplier=1
+2025-12-14 23:31:03,207 - inventory - INFO - Product added id=1
+2025-12-14 23:31:03,213 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 23:31:03,214 - inventory - INFO - Product added id=1
+2025-12-14 23:31:03,219 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 23:31:03,220 - inventory - INFO - Product added id=1
+2025-12-14 23:31:03,430 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 23:31:03,432 - inventory - INFO - Product added id=2
+2025-12-14 23:31:03,503 - inventory - INFO - Adding product: UnitTestProduct sku=PBGRQ6NYU supplier=1
+2025-12-14 23:31:03,506 - inventory - INFO - Product added id=1
+2025-12-14 23:31:03,796 - inventory - INFO - Adding product: Product 2 sku=PROD2 supplier=1
+2025-12-14 23:31:03,797 - inventory - INFO - Product added id=2
+2025-12-14 23:31:04,065 - inventory - INFO - Adding product: PTest sku=PN67JS4YC supplier=20
+2025-12-14 23:31:04,075 - inventory - INFO - Product added id=21
+2025-12-14 23:31:35,786 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 23:31:35,794 - inventory - INFO - Product added id=1
+2025-12-14 23:31:35,801 - inventory - INFO - Adding product: Auto SKU Product sku=PO28JPEDV supplier=1
+2025-12-14 23:31:35,803 - inventory - INFO - Product added id=1
+2025-12-14 23:31:35,808 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 23:31:35,809 - inventory - INFO - Product added id=1
+2025-12-14 23:31:35,816 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 23:31:35,818 - inventory - INFO - Product added id=1
+2025-12-14 23:31:36,031 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 23:31:36,033 - inventory - INFO - Product added id=2
+2025-12-14 23:31:36,102 - inventory - INFO - Adding product: UnitTestProduct sku=PJ2D90LGZ supplier=1
+2025-12-14 23:31:36,104 - inventory - INFO - Product added id=1
+2025-12-14 23:31:36,616 - inventory - INFO - Adding product: Product 2 sku=PROD2 supplier=1
+2025-12-14 23:31:36,619 - inventory - INFO - Product added id=2
+2025-12-14 23:31:36,908 - inventory - INFO - Adding product: PTest sku=PUNZPOCR3 supplier=22
+2025-12-14 23:31:36,919 - inventory - INFO - Product added id=22
+2025-12-14 23:31:59,882 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 23:31:59,892 - inventory - INFO - Product added id=1
+2025-12-14 23:31:59,899 - inventory - INFO - Adding product: Auto SKU Product sku=PYA6JLHS1 supplier=1
+2025-12-14 23:31:59,901 - inventory - INFO - Product added id=1
+2025-12-14 23:31:59,908 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 23:31:59,910 - inventory - INFO - Product added id=1
+2025-12-14 23:31:59,915 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 23:31:59,917 - inventory - INFO - Product added id=1
+2025-12-14 23:32:00,134 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 23:32:00,135 - inventory - INFO - Product added id=2
+2025-12-14 23:32:00,209 - inventory - INFO - Adding product: UnitTestProduct sku=PXAPW7SUJ supplier=1
+2025-12-14 23:32:00,211 - inventory - INFO - Product added id=1
+2025-12-14 23:32:00,508 - inventory - INFO - Adding product: Product 2 sku=PROD2 supplier=1
+2025-12-14 23:32:00,511 - inventory - INFO - Product added id=2
+2025-12-14 23:32:00,775 - inventory - INFO - Adding product: PTest sku=PTC73PDYE supplier=24
+2025-12-14 23:32:00,785 - inventory - INFO - Product added id=23
+2025-12-14 23:37:36,551 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 23:37:36,560 - inventory - INFO - Product added id=1
+2025-12-14 23:37:36,573 - inventory - INFO - Adding product: Auto SKU Product sku=PGR0XJXW7 supplier=1
+2025-12-14 23:37:36,576 - inventory - INFO - Product added id=1
+2025-12-14 23:37:36,581 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 23:37:36,583 - inventory - INFO - Product added id=1
+2025-12-14 23:37:36,588 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 23:37:36,590 - inventory - INFO - Product added id=1
+2025-12-14 23:37:36,825 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 23:37:36,827 - inventory - INFO - Product added id=2
+2025-12-14 23:37:36,901 - inventory - INFO - Adding product: UnitTestProduct sku=PI3Z13DUQ supplier=1
+2025-12-14 23:37:36,903 - inventory - INFO - Product added id=1
+2025-12-14 23:37:37,199 - inventory - INFO - Adding product: Product 2 sku=PROD2 supplier=1
+2025-12-14 23:37:37,200 - inventory - INFO - Product added id=2
+2025-12-14 23:37:37,575 - inventory - INFO - Adding product: PTest sku=P0UZVFJRO supplier=26
+2025-12-14 23:37:37,586 - inventory - INFO - Product added id=24
+2025-12-14 23:41:45,280 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 23:41:45,288 - inventory - INFO - Product added id=1
+2025-12-14 23:41:45,305 - inventory - INFO - Adding product: Auto SKU Product sku=PANZGZ8MO supplier=1
+2025-12-14 23:41:45,307 - inventory - INFO - Product added id=1
+2025-12-14 23:41:45,314 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 23:41:45,316 - inventory - INFO - Product added id=1
+2025-12-14 23:41:45,322 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 23:41:45,323 - inventory - INFO - Product added id=1
+2025-12-14 23:41:45,528 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 23:41:45,530 - inventory - INFO - Product added id=2
+2025-12-14 23:41:45,603 - inventory - INFO - Adding product: UnitTestProduct sku=PEHNDDTTZ supplier=1
+2025-12-14 23:41:45,604 - inventory - INFO - Product added id=1
+2025-12-14 23:41:45,896 - inventory - INFO - Adding product: Product 2 sku=PROD2 supplier=1
+2025-12-14 23:41:45,899 - inventory - INFO - Product added id=2
+2025-12-14 23:41:46,282 - inventory - INFO - Adding product: PTest sku=PIA7SG7FX supplier=28
+2025-12-14 23:41:46,293 - inventory - INFO - Product added id=25
+2025-12-14 23:42:36,513 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 23:42:36,520 - inventory - INFO - Product added id=1
+2025-12-14 23:42:36,534 - inventory - INFO - Adding product: Auto SKU Product sku=PI404AGBK supplier=1
+2025-12-14 23:42:36,537 - inventory - INFO - Product added id=1
+2025-12-14 23:42:36,542 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 23:42:36,544 - inventory - INFO - Product added id=1
+2025-12-14 23:42:36,549 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 23:42:36,551 - inventory - INFO - Product added id=1
+2025-12-14 23:42:36,794 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 23:42:36,797 - inventory - INFO - Product added id=2
+2025-12-14 23:42:36,883 - inventory - INFO - Adding product: UnitTestProduct sku=PL80K5APN supplier=1
+2025-12-14 23:42:36,885 - inventory - INFO - Product added id=1
+2025-12-14 23:42:37,184 - inventory - INFO - Adding product: Product 2 sku=PROD2 supplier=1
+2025-12-14 23:42:37,186 - inventory - INFO - Product added id=2
+2025-12-14 23:42:37,563 - inventory - INFO - Adding product: PTest sku=PL34BJPD8 supplier=30
+2025-12-14 23:42:37,573 - inventory - INFO - Product added id=26
+2025-12-14 23:43:34,654 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 23:43:34,663 - inventory - INFO - Product added id=1
+2025-12-14 23:43:34,674 - inventory - INFO - Adding product: Auto SKU Product sku=PKWZXRGJQ supplier=1
+2025-12-14 23:43:34,676 - inventory - INFO - Product added id=1
+2025-12-14 23:43:34,683 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 23:43:34,684 - inventory - INFO - Product added id=1
+2025-12-14 23:43:34,688 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 23:43:34,691 - inventory - INFO - Product added id=1
+2025-12-14 23:43:34,875 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 23:43:34,877 - inventory - INFO - Product added id=2
+2025-12-14 23:43:34,942 - inventory - INFO - Adding product: UnitTestProduct sku=PHUWAYHKR supplier=1
+2025-12-14 23:43:34,944 - inventory - INFO - Product added id=1
+2025-12-14 23:43:35,195 - inventory - INFO - Adding product: Product 2 sku=PROD2 supplier=1
+2025-12-14 23:43:35,197 - inventory - INFO - Product added id=2
+2025-12-14 23:43:35,545 - inventory - INFO - Adding product: PTest sku=P165M1Z5K supplier=32
+2025-12-14 23:43:35,554 - inventory - INFO - Product added id=27
+2025-12-14 23:43:45,482 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 23:43:45,490 - inventory - INFO - Product added id=1
+2025-12-14 23:43:45,501 - inventory - INFO - Adding product: Auto SKU Product sku=PPZJLQY9B supplier=1
+2025-12-14 23:43:45,503 - inventory - INFO - Product added id=1
+2025-12-14 23:43:45,509 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 23:43:45,510 - inventory - INFO - Product added id=1
+2025-12-14 23:43:45,515 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 23:43:45,516 - inventory - INFO - Product added id=1
+2025-12-14 23:43:45,704 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 23:43:45,706 - inventory - INFO - Product added id=2
+2025-12-14 23:43:45,769 - inventory - INFO - Adding product: UnitTestProduct sku=P7AHZ3QBC supplier=1
+2025-12-14 23:43:45,772 - inventory - INFO - Product added id=1
+2025-12-14 23:43:46,021 - inventory - INFO - Adding product: Product 2 sku=PROD2 supplier=1
+2025-12-14 23:43:46,023 - inventory - INFO - Product added id=2
+2025-12-14 23:43:46,370 - inventory - INFO - Adding product: PTest sku=P83IG31CL supplier=34
+2025-12-14 23:43:46,380 - inventory - INFO - Product added id=28
+2025-12-14 23:44:07,137 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 23:44:07,144 - inventory - INFO - Product added id=1
+2025-12-14 23:44:07,156 - inventory - INFO - Adding product: Auto SKU Product sku=PACA0N9FS supplier=1
+2025-12-14 23:44:07,158 - inventory - INFO - Product added id=1
+2025-12-14 23:44:07,162 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 23:44:07,164 - inventory - INFO - Product added id=1
+2025-12-14 23:44:07,168 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 23:44:07,169 - inventory - INFO - Product added id=1
+2025-12-14 23:44:07,331 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 23:44:07,333 - inventory - INFO - Product added id=2
+2025-12-14 23:44:07,390 - inventory - INFO - Adding product: UnitTestProduct sku=PSXN66JEZ supplier=1
+2025-12-14 23:44:07,392 - inventory - INFO - Product added id=1
+2025-12-14 23:44:07,618 - inventory - INFO - Adding product: Product 2 sku=PROD2 supplier=1
+2025-12-14 23:44:07,619 - inventory - INFO - Product added id=2
+2025-12-14 23:44:07,942 - inventory - INFO - Adding product: PTest sku=PFRUTTH4E supplier=36
+2025-12-14 23:44:07,952 - inventory - INFO - Product added id=29
+2025-12-14 23:44:28,072 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 23:44:28,082 - inventory - INFO - Product added id=1
+2025-12-14 23:44:28,098 - inventory - INFO - Adding product: Auto SKU Product sku=PDDH0TMM7 supplier=1
+2025-12-14 23:44:28,100 - inventory - INFO - Product added id=1
+2025-12-14 23:44:28,107 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 23:44:28,109 - inventory - INFO - Product added id=1
+2025-12-14 23:44:28,114 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 23:44:28,116 - inventory - INFO - Product added id=1
+2025-12-14 23:44:28,326 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 23:44:28,328 - inventory - INFO - Product added id=2
+2025-12-14 23:44:28,398 - inventory - INFO - Adding product: UnitTestProduct sku=PZ5C2G630 supplier=1
+2025-12-14 23:44:28,399 - inventory - INFO - Product added id=1
+2025-12-14 23:44:28,682 - inventory - INFO - Adding product: Product 2 sku=PROD2 supplier=1
+2025-12-14 23:44:28,684 - inventory - INFO - Product added id=2
+2025-12-14 23:44:29,059 - inventory - INFO - Adding product: PTest sku=PC8HLHABR supplier=38
+2025-12-14 23:44:29,070 - inventory - INFO - Product added id=30
+2025-12-14 23:58:36,616 - inventory - INFO - Adding product: Test Product sku=TEST-001 supplier=1
+2025-12-14 23:58:36,623 - inventory - INFO - Product added id=1
+2025-12-14 23:58:36,638 - inventory - INFO - Adding product: Auto SKU Product sku=PX3B7LXSN supplier=1
+2025-12-14 23:58:36,640 - inventory - INFO - Product added id=1
+2025-12-14 23:58:36,649 - inventory - INFO - Adding product: No Barcode Product sku=TEST-002 supplier=1
+2025-12-14 23:58:36,651 - inventory - INFO - Product added id=1
+2025-12-14 23:58:36,658 - inventory - INFO - Adding product: Stock Movement Test sku=TEST-003 supplier=1
+2025-12-14 23:58:36,660 - inventory - INFO - Product added id=1
+2025-12-14 23:58:36,843 - inventory - INFO - Adding product: Product 2 sku=TEST-MULTI-2 supplier=1
+2025-12-14 23:58:36,846 - inventory - INFO - Product added id=2
+2025-12-14 23:58:36,953 - inventory - INFO - Adding product: UnitTestProduct sku=PWICSQG9M supplier=1
+2025-12-14 23:58:36,955 - inventory - INFO - Product added id=1
+2025-12-14 23:58:37,203 - inventory - INFO - Adding product: Product 2 sku=PROD2 supplier=1
+2025-12-14 23:58:37,204 - inventory - INFO - Product added id=2
+2025-12-14 23:58:37,599 - inventory - INFO - Adding product: PTest sku=PSFEAH0IK supplier=40
+2025-12-14 23:58:37,609 - inventory - INFO - Product added id=31

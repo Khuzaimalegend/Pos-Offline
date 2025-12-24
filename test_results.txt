@@ -1,0 +1,36 @@
+[19:51:03] [INFO] ============================================================
+[19:51:03] [INFO] STARTING AUTOMATED SALES WORKFLOW TESTS
+[19:51:03] [INFO] ============================================================
+[19:51:03] [INFO] Setting up test environment...
+[19:51:04] [SUCCESS] Test environment setup complete
+[19:51:04] [INFO] TEST 1: Adding product to cart...
+[19:51:04] [INFO] Initial cart size: 0
+[19:51:04] [INFO] New cart size: 1
+[19:51:04] [PASS] ✅ Product added to cart successfully
+[19:51:04] [INFO] 
+TEST 2: Editing quantity with arrow keys...
+[19:51:04] [INFO] Initial quantity: 1.0
+[19:51:04] [PASS] ✅ Arrow key navigation works
+[19:51:04] [INFO] 
+TEST 3: Editing quantity with number keys...
+[19:51:04] [INFO] Initial quantity: 1.0
+[19:51:04] [INFO] New quantity: 1.0
+[19:51:04] [WARN] ⚠️ Quantity unchanged (may need manual verification)
+[19:51:04] [INFO] 
+TEST 4: Navigating to price field with arrows...
+[19:51:04] [INFO] Initial price: Rs 20.00
+[19:51:04] [FAIL] ❌ Expected column 3, got column 2
+[19:51:04] [INFO] 
+TEST 5: Editing price with number keys...
+[19:51:04] [INFO] Initial price: Rs 20.00
+[19:51:04] [INFO] New price: Rs 20.00
+[19:51:04] [WARN] ⚠️ Price unchanged (may need manual verification)
+[19:51:04] [INFO] 
+============================================================
+[19:51:04] [INFO] TEST SUMMARY
+[19:51:04] [INFO] ============================================================
+[19:51:04] [INFO] Total Tests: 5
+[19:51:04] [INFO] ✅ Passed: 4
+[19:51:04] [INFO] ❌ Failed: 1
+[19:51:04] [INFO] ⏭️ Skipped: 0
+[19:51:04] [INFO] Duration: 0.62 seconds

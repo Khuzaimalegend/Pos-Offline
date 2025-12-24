@@ -1,0 +1,7 @@
+{
+    "mode": "server",
+    "timestamp": "2025-12-10T18:42:50.047156",
+    "port": 5432,
+    "database": "pos_network",
+    "username": "admin"
+}
