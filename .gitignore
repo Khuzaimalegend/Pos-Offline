@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+
+# Builds
+build/
+dist/
+*.exe
+*.pkg
+
+# Logs
+*.log
+
+# Coverage
+.coverage
