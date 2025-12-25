@@ -1,9 +1,9 @@
 try:
     from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox
-    from PySide6.QtCore import Qt
+    from PySide6.QtCore import Qt, QEvent
 except ImportError:
     from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox
-    from PyQt6.QtCore import Qt
+    from PyQt6.QtCore import Qt, QEvent
 from pos_app.database.connection import Database
 from pos_app.models.database import User
 from pos_app.utils.auth import check_password
@@ -15,6 +15,35 @@ class LoginDialog(QDialog):
         super().__init__(parent)
         self.user = None
         self.setup_ui()
+
+    def eventFilter(self, obj, event):
+        """Handle arrow key navigation between login fields"""
+        if event.type() == QEvent.KeyPress:
+            key = event.key()
+            
+            # Handle down arrow or tab to move to next field
+            if key in (Qt.Key_Down, Qt.Key_Tab):
+                self.current_input_index = (self.current_input_index + 1) % len(self.inputs)
+                self.inputs[self.current_input_index].setFocus()
+                return True
+            
+            # Handle up arrow or shift+tab to move to previous field
+            elif key in (Qt.Key_Up, Qt.Key_Backtab):
+                self.current_input_index = (self.current_input_index - 1) % len(self.inputs)
+                self.inputs[self.current_input_index].setFocus()
+                return True
+            
+            # Handle Enter key to submit login
+            elif key in (Qt.Key_Return, Qt.Key_Enter):
+                if self.current_input_index == 2:  # Login button focused
+                    self.try_login()
+                else:
+                    # Move to next field on Enter
+                    self.current_input_index = (self.current_input_index + 1) % len(self.inputs)
+                    self.inputs[self.current_input_index].setFocus()
+                return True
+        
+        return super().eventFilter(obj, event)
 
     def setup_ui(self):
         self.setWindowTitle("POS System Login")
@@ -137,6 +166,17 @@ class LoginDialog(QDialog):
         """)
         login_btn.clicked.connect(self.try_login)
         layout.addWidget(login_btn)
+        
+        # Store references for navigation
+        self.login_btn = login_btn
+        self.inputs = [self.username_input, self.password_input, self.login_btn]
+        self.current_input_index = 0
+        
+        # Set initial focus
+        self.username_input.setFocus()
+        
+        # Install event filter for arrow key navigation
+        self.installEventFilter(self)
 
         # Error message
         self.error_label = QLabel()

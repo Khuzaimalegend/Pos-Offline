@@ -1349,6 +1349,17 @@ class SalesWidget(QWidget):
                 current_row = self.currentRow()
                 current_col = self.currentColumn()
                 
+                # Handle Delete key to remove selected row
+                if event.key() == Qt.Key_Delete:
+                    print(f"[DEBUG] Delete key pressed in CartTableWidget at row {current_row}")
+                    # Get parent SalesWidget to call remove_cart_item
+                    parent_widget = self.parent()
+                    while parent_widget and not hasattr(parent_widget, 'remove_cart_item'):
+                        parent_widget = parent_widget.parent()
+                    if parent_widget and current_row >= 0:
+                        parent_widget.remove_cart_item(current_row)
+                    return
+                
                 # Handle arrow keys
                 if event.key() in (Qt.Key_Left, Qt.Key_Right, Qt.Key_Up, Qt.Key_Down):
                     # Check if we're in an editable column
@@ -1450,20 +1461,102 @@ class SalesWidget(QWidget):
                 return editor
             
             def eventFilter(self, obj, event):
-                """Intercept arrow keys to navigate between cells instead of within text"""
+                """Intercept arrow keys and other shortcuts to navigate and control cart"""
                 try:
                     from PySide6.QtCore import Qt, QEvent
+                    from PySide6.QtWidgets import QApplication
                 except ImportError:
                     from PyQt6.QtCore import Qt, QEvent
+                    from PyQt6.QtWidgets import QApplication
                 
                 # Only handle KeyPress events
                 if event.type() == QEvent.KeyPress:
                     key = event.key()
+                    modifiers = QApplication.keyboardModifiers()
+                    
+                    # Handle Delete key to remove current row
+                    if key == Qt.Key_Delete:
+                        if self._table and hasattr(self, '_current_row'):
+                            row = self._current_row
+                            # Get the parent SalesWidget to call remove_cart_item
+                            parent_widget = self._table.parent()
+                            while parent_widget and not hasattr(parent_widget, 'remove_cart_item'):
+                                parent_widget = parent_widget.parent()
+                            if parent_widget:
+                                parent_widget.remove_cart_item(row)
+                            return True  # Event handled
+                    
+                    # Handle Ctrl+C to copy
+                    if key == Qt.Key_C and modifiers == Qt.ControlModifier:
+                        if hasattr(obj, 'copy'):
+                            obj.copy()
+                        return True
+                    
+                    # Handle Ctrl+V to paste
+                    if key == Qt.Key_V and modifiers == Qt.ControlModifier:
+                        if hasattr(obj, 'paste'):
+                            obj.paste()
+                        return True
+                    
+                    # Handle Ctrl+X to cut
+                    if key == Qt.Key_X and modifiers == Qt.ControlModifier:
+                        if hasattr(obj, 'cut'):
+                            obj.cut()
+                        return True
+                    
+                    # Handle Ctrl+A to select all
+                    if key == Qt.Key_A and modifiers == Qt.ControlModifier:
+                        if hasattr(obj, 'selectAll'):
+                            obj.selectAll()
+                        return True
+                    
+                    # Handle Escape to cancel editing
+                    if key == Qt.Key_Escape:
+                        if self._table:
+                            self._table.closePersistentEditor(self._table.item(self._current_row, self._current_col))
+                        return True
+                    
+                    # Handle Enter to accept and move down
+                    if key == Qt.Key_Return or key == Qt.Key_Enter:
+                        if self._table and hasattr(self, '_current_row'):
+                            # Commit the data before closing editor
+                            self._table.commitData(obj)
+                            # Close current editor and move to next row
+                            self._table.closePersistentEditor(self._table.item(self._current_row, self._current_col))
+                            new_row = min(self._table.rowCount() - 1, self._current_row + 1)
+                            self._table.setCurrentCell(new_row, self._current_col)
+                            if self._current_col in (1, 3):
+                                QTimer.singleShot(0, lambda: self._table.editItem(self._table.item(new_row, self._current_col)))
+                        return True
+                    
+                    # Handle Tab to move to next column or checkout
+                    if key == Qt.Key_Tab:
+                        if self._table and hasattr(self, '_current_row') and hasattr(self, '_current_col'):
+                            # Commit the data before closing editor
+                            self._table.commitData(obj)
+                            self._table.closePersistentEditor(self._table.item(self._current_row, self._current_col))
+                            
+                            # If in Sale Price column, move to checkout section
+                            if self._current_col == 3:
+                                # Find parent SalesWidget and focus checkout
+                                parent_widget = self._table.parent()
+                                while parent_widget and not hasattr(parent_widget, 'amount_paid_input'):
+                                    parent_widget = parent_widget.parent()
+                                if parent_widget and hasattr(parent_widget, 'amount_paid_input'):
+                                    parent_widget.amount_paid_input.setFocus()
+                                    parent_widget.amount_paid_input.selectAll()
+                            else:
+                                # Toggle between QTY and Sale Price
+                                new_col = 3 if self._current_col == 1 else 1
+                                self._table.setCurrentCell(self._current_row, new_col)
+                                QTimer.singleShot(0, lambda: self._table.editItem(self._table.item(self._current_row, new_col)))
+                        return True
                     
                     # Handle arrow keys to navigate between cells
                     if key in (Qt.Key_Left, Qt.Key_Right, Qt.Key_Up, Qt.Key_Down):
                         if self._table and hasattr(self, '_current_row') and hasattr(self, '_current_col'):
-                            # Close the current editor
+                            # Commit the data before closing editor
+                            self._table.commitData(obj)
                             self._table.closePersistentEditor(self._table.item(self._current_row, self._current_col))
                             
                             new_row = self._current_row
@@ -1496,10 +1589,16 @@ class SalesWidget(QWidget):
                 editor.selectAll()
             
             def setModelData(self, editor, model, index):
+                print(f"[DEBUG] setModelData called for row {index.row()}, col {index.column()}")
                 # Get the text from the editor
                 text = editor.text()
+                print(f"[DEBUG] Editor text: {text}")
                 # Set the data in the model
                 model.setData(index, text, Qt.EditRole)
+                print(f"[DEBUG] Data set to model")
+                
+                # Let the existing _on_cart_item_changed handle the updates
+                # This avoids conflicts and ensures proper handling
         
         # Apply delegate to QTY and SALE PRICE columns
         self.cart_table.setItemDelegateForColumn(1, SelectAllDelegate(self.cart_table))  # QTY (column 1)
@@ -1579,6 +1678,9 @@ class SalesWidget(QWidget):
         
         # Connect to item changed signal to handle inline edits
         self.cart_table.itemChanged.connect(self._on_cart_item_changed)
+        
+        # Connect cell click handler for remove button
+        self.cart_table.cellClicked.connect(self._on_cart_item_clicked)
         
         try:
             self.cart_table.setFocusPolicy(Qt.StrongFocus)
@@ -2799,15 +2901,23 @@ class SalesWidget(QWidget):
             # profit = final_total - purchase_total
             profit = final_total - purchase_total
 
-        # Get amount_paid = parsed_user_input
+        # Auto-increase amount_paid to match final_total when products are added
         amount_paid_input = getattr(self, 'amount_paid_input', None)
         if amount_paid_input:
             try:
                 amount_paid = float(amount_paid_input.value())
+                # Always auto-increase amount_paid to match final_total when cart changes
+                if final_total > 0:
+                    amount_paid_input.setValue(final_total)
+                    amount_paid = final_total
+                elif amount_paid == 0 and final_total == 0:
+                    # Keep at 0 if cart is empty
+                    pass
             except (ValueError, TypeError):
-                amount_paid = 0.0
+                amount_paid = final_total if final_total > 0 else 0
+                amount_paid_input.setValue(amount_paid)
         else:
-            amount_paid = 0.0
+            amount_paid = final_total if final_total > 0 else 0
         
         # change = max(0, amount_paid - final_total)
         change = max(0, amount_paid - final_total)
@@ -4325,8 +4435,37 @@ class SalesWidget(QWidget):
             import traceback
             traceback.print_exc()
 
+    def update_cart_row(self, row_index):
+        """Update only a specific row in the cart table"""
+        if not self.current_cart or row_index >= len(self.current_cart):
+            return
+            
+        item = self.current_cart[row_index]
+        
+        # Update QTY column
+        qty_item = self.cart_table.item(row_index, 1)
+        if qty_item:
+            qty_item.setText(str(item['quantity']))
+        
+        # Update Sale Price column
+        price_item = self.cart_table.item(row_index, 3)
+        if price_item:
+            price_item.setText(f"{item['price']:.2f}")
+        
+        # Update Total column
+        total = item['quantity'] * item['price']
+        total_item = self.cart_table.item(row_index, 4)
+        if total_item:
+            total_item.setText(f"{total:.2f}")
+        
+        # Update Profit column
+        profit = total - (item['quantity'] * item.get('purchase_price', 0))
+        profit_item = self.cart_table.item(row_index, 5)
+        if profit_item:
+            profit_item.setText(f"{profit:.2f}")
+
     def update_cart_table(self):
-        """Update the cart table display with purchase/sale prices"""
+        """Update the cart table with current items"""
         print(f"[DEBUG] update_cart_table called with {len(self.current_cart)} items")
         import traceback
         print("[DEBUG] Call stack:")
@@ -4917,26 +5056,14 @@ class SalesWidget(QWidget):
         except Exception:
             return
 
-    def _on_cart_item_clicked(self, item):
-        """Handle cart table item clicks - specifically for Remove column"""
-        if item is None:
-            return
-        
-        row = item.row()
-        col = item.column()
-        
+    def _on_cart_item_clicked(self, row, col):
+        """Handle cart table cell clicks - specifically for Remove column"""
+        print(f"[DEBUG] Cart cell clicked: row={row}, col={col}")
         # Check if Remove column (column 6) was clicked
         if col == 6:
-            try:
-                idx = item.data(Qt.UserRole)
-            except Exception:
-                idx = None
-            try:
-                idx = int(idx) if idx is not None else row
-            except Exception:
-                idx = row
-            print(f"[DEBUG] Remove button clicked for row {row} (idx={idx})")
-            self.remove_cart_item(idx)
+            print(f"[DEBUG] Remove column clicked! Removing row {row}")
+            # Use row directly since cellClicked gives us the correct row
+            self.remove_cart_item(row)
 
     def update_totals(self):
         """Update all total labels with enhanced calculations"""
@@ -4955,6 +5082,18 @@ class SalesWidget(QWidget):
             taxable_amount = subtotal - discount
             tax = taxable_amount * (self.tax_rate / 100)
             total = taxable_amount + tax
+
+        # Auto-increase amount_paid to match total when products are added
+        if hasattr(self, 'amount_paid_input'):
+            print(f"[DEBUG] Auto-increasing amount_paid: total={total}, current_value={self.amount_paid_input.value()}")
+            if total > 0:
+                self.amount_paid_input.setValue(total)
+                print(f"[DEBUG] Set amount_paid to {total}")
+            else:
+                self.amount_paid_input.setValue(0)
+                print(f"[DEBUG] Set amount_paid to 0")
+        else:
+            print(f"[DEBUG] amount_paid_input not found!")
 
         # Update enhanced summary labels
         if hasattr(self, 'cart_items_label'):
@@ -7139,22 +7278,22 @@ class SalesWidget(QWidget):
             if hasattr(self, 'cart_total_label'):
                 self.cart_total_label.setText(f"Final Total: Rs {total:,.2f}")
 
-            # Only auto-fill amount paid when empty.
+            # Auto-increase amount paid to match total when products are added
             if hasattr(self, 'amount_paid_input'):
+                print(f"[DEBUG] Auto-increasing amount_paid: total={total}")
                 try:
-                    current_paid = float(self.amount_paid_input.value())
-                except Exception:
-                    current_paid = 0.0
-
-                if current_paid == 0.0 and total > 0.0:
-                    try:
-                        self.amount_paid_input.blockSignals(True)
+                    self.amount_paid_input.blockSignals(True)
+                    if total > 0:
                         self.amount_paid_input.setValue(total)
-                    finally:
-                        try:
-                            self.amount_paid_input.blockSignals(False)
-                        except Exception:
-                            pass
+                        print(f"[DEBUG] Set amount_paid to {total}")
+                    else:
+                        self.amount_paid_input.setValue(0)
+                        print(f"[DEBUG] Set amount_paid to 0")
+                finally:
+                    try:
+                        self.amount_paid_input.blockSignals(False)
+                    except Exception:
+                        pass
 
             # Update change display
             try:

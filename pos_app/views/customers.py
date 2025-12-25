@@ -494,18 +494,20 @@ class CustomersWidget(QWidget):
             print(f"DEBUG: Page dimensions: {width}x{height}")
             print(f"DEBUG: Printer resolution: {printer.resolution()}")
             
-            # Calculate DPI scaling factor
+            # Calculate DPI scaling factor - fix for printer resolution
             dpi = printer.resolution()
-            scale = dpi / 72.0  # 72 DPI is the base
+            # Use fixed scale to prevent microscopic text on high DPI printers
+            scale = max(1.0, min(dpi / 72.0, 3.0))  # Clamp between 1.0 and 3.0
+            print(f"[DEBUG] Printer DPI: {dpi}, Scale: {scale}")
             
-            # Use extremely small font sizes (6x smaller than before)
-            store_font = QFont("Arial", int(2 * scale), QFont.Bold)
-            title_font = QFont("Arial", int(2 * scale), QFont.Bold)
-            header_font = QFont("Arial", int(1 * scale), QFont.Bold)
-            normal_font = QFont("Arial", int(1 * scale))
+            # Use fixed font sizes that work regardless of printer DPI
+            store_font = QFont("Arial", 14, QFont.Bold)
+            title_font = QFont("Arial", 12, QFont.Bold)
+            header_font = QFont("Arial", 10, QFont.Bold)
+            normal_font = QFont("Arial", 9)
             
-            # Minimal margins to maximize space
-            margin = int(width * 0.005)
+            # Use reasonable margins to utilize full page width
+            margin = 50  # Fixed 50 pixel margin
             left_margin = margin
             right_margin = width - margin
             y_position = margin
@@ -515,14 +517,14 @@ class CustomersWidget(QWidget):
             store_name = "Sarhad General Store"
             store_width = painter.fontMetrics().horizontalAdvance(store_name)
             painter.drawText(width // 2 - store_width // 2, y_position, store_name)
-            y_position += int(5 * scale)
+            y_position += 30
             
             # Title
             painter.setFont(title_font)
             title_text = "CUSTOMER LIST"
             title_width = painter.fontMetrics().horizontalAdvance(title_text)
             painter.drawText(width // 2 - title_width // 2, y_position, title_text)
-            y_position += int(6 * scale)
+            y_position += 30
             
             # Table headers - New structure: Invoice ID, Name, Previous Balance, Last Paid, New Balance, Now Paid
             painter.setFont(header_font)
@@ -541,8 +543,9 @@ class CustomersWidget(QWidget):
             ]
             
             x_positions = [left_margin]
-            for i in range(len(col_widths) - 1):
-                x_positions.append(x_positions[-1] + col_widths[i])
+            for i in range(len(col_widths)):
+                if i < len(col_widths) - 1:
+                    x_positions.append(x_positions[-1] + col_widths[i])
             
             print(f"DEBUG: Column positions: {x_positions}")
             print(f"DEBUG: Column widths: {col_widths}")
@@ -552,17 +555,17 @@ class CustomersWidget(QWidget):
                 painter.drawText(int(x_positions[i]), y_position, header)
                 # Draw vertical grid lines
                 if i < len(headers) - 1:
-                    painter.drawLine(int(x_positions[i+1]), y_position - int(2 * scale), int(x_positions[i+1]), y_position + int(4 * scale))
-            y_position += int(3 * scale)
+                    painter.drawLine(int(x_positions[i+1]), y_position - 5, int(x_positions[i+1]), y_position + 10)
+            y_position += 20
             
             # Draw horizontal line under headers
             painter.drawLine(int(left_margin), y_position, int(right_margin), y_position)
-            y_position += int(2 * scale)
+            y_position += 15
             
             # Table data with grid lines
             painter.setFont(normal_font)
-            row_height = int(3 * scale)
-            header_footer_space = int(margin * 2 + 50 * scale)
+            row_height = 25  # Fixed 25 pixel row height
+            header_footer_space = 200  # Fixed space for header and footer
             max_rows_per_page = (height - header_footer_space) // row_height
             current_row = 0
             
@@ -625,11 +628,11 @@ class CustomersWidget(QWidget):
                 painter.drawText(int(x_positions[5]), y_position, "_____")
                 
                 # Draw horizontal grid line after each row
-                painter.drawLine(int(left_margin), y_position + int(1 * scale), int(right_margin), y_position + int(1 * scale))
+                painter.drawLine(int(left_margin), y_position + 3, int(right_margin), y_position + 3)
                 
                 # Draw vertical grid lines for each column
                 for i in range(1, len(headers)):
-                    painter.drawLine(int(x_positions[i]), y_position - int(2 * scale), int(x_positions[i]), y_position + int(1 * scale))
+                    painter.drawLine(int(x_positions[i]), y_position - 3, int(x_positions[i]), y_position + 3)
                 
                 y_position += row_height
                 current_row += 1

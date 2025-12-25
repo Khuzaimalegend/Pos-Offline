@@ -200,8 +200,11 @@ class InventoryWidget(QWidget):
             from PySide6.QtCore import QSettings
             settings = QSettings()
             product_dialog_type = settings.value("product_dialog_type", "Detailed")
+            # Convert to string and strip to handle different types/casing
+            product_dialog_type = str(product_dialog_type).strip()
+            print(f"[DEBUG] Product dialog type from settings: '{product_dialog_type}'")
             
-            if product_dialog_type == "Simple":
+            if product_dialog_type.lower() == "simple":
                 # Use simple product dialog for editing
                 from pos_app.views.simple_product_dialog import ProductDialog
                 dialog = ProductDialog(self, product)

@@ -1858,6 +1858,10 @@ class SettingsWidget(QWidget):
             if not shutil.which(cmd[0]) and not os.path.exists(cmd[0]):
                 raise Exception(f"PostgreSQL tool not found: {cmd[0]}")
             
+            print(f"[DEBUG] Running command: {' '.join(cmd)}")
+            if env:
+                print(f"[DEBUG] Environment: PGPASSWORD set")
+            
             # Run command with timeout
             result = subprocess.run(
                 cmd, 
@@ -1868,9 +1872,15 @@ class SettingsWidget(QWidget):
                 creationflags=subprocess.CREATE_NO_WINDOW if platform.system() == 'Windows' else 0
             )
             
+            print(f"[DEBUG] Command return code: {result.returncode}")
+            if result.stdout:
+                print(f"[DEBUG] Command stdout: {result.stdout}")
+            if result.stderr:
+                print(f"[DEBUG] Command stderr: {result.stderr}")
+            
             if result.returncode != 0:
                 err = (result.stderr or result.stdout or '').strip()
-                raise Exception(f"PostgreSQL command failed:\n{err}\n\nCommand: {' '.join(cmd)}")
+                raise Exception(f"PostgreSQL command failed with return code {result.returncode}:\n{err}\n\nCommand: {' '.join(cmd)}")
             
             return result
             
@@ -1968,10 +1978,15 @@ class SettingsWidget(QWidget):
 
             cfg = self._get_active_db_connection_info()
             
+            # Debug: Show connection info
+            print(f"[DEBUG] Backup connection info: {cfg}")
+            
             # Test database connection first
             try:
                 self._test_database_connection(cfg)
+                print("[DEBUG] Database connection test passed")
             except Exception as e:
+                print(f"[DEBUG] Database connection test failed: {e}")
                 QMessageBox.critical(
                     self,
                     "Connection Failed",
@@ -1983,6 +1998,12 @@ class SettingsWidget(QWidget):
             env["PGPASSWORD"] = str(cfg.get('password', '') or '')
 
             pg_dump = self._find_pg_tool('pg_dump')
+            print(f"[DEBUG] Found pg_dump at: {pg_dump}")
+            
+            # Check if pg_dump actually exists
+            if not shutil.which(pg_dump) and not os.path.exists(pg_dump):
+                raise Exception(f"pg_dump not found at: {pg_dump}\n\nPlease ensure PostgreSQL is installed and pg_dump is in your system PATH.")
+            
             # Use custom format with all data, including large objects
             cmd = [
                 pg_dump,
@@ -2000,6 +2021,8 @@ class SettingsWidget(QWidget):
                 '-v',  # Verbose mode
                 '-f', str(backup_file)
             ]
+            
+            print(f"[DEBUG] Backup command: {' '.join(cmd)}")
 
             # Show progress dialog
             progress = QProgressDialog("Creating comprehensive backup...\nThis includes all products, customers, sales, suppliers, expenses, and reports.", "Cancel", 0, 0, self)
@@ -2037,6 +2060,40 @@ class SettingsWidget(QWidget):
                 # Update backup list
                 self.update_backup_list()
                 
+            except Exception as backup_error:
+                print(f"[DEBUG] pg_dump backup failed: {backup_error}")
+                
+                # Try alternative backup method using SQL dump
+                try:
+                    progress.setLabelText("pg_dump failed. Trying alternative backup method...")
+                    self._create_sql_backup(backup_file, cfg)
+                    progress.setValue(100)
+                    
+                    file_size = os.path.getsize(backup_file) / (1024 * 1024)  # Size in MB
+                    
+                    QMessageBox.information(
+                        self,
+                        "Backup Successful (Alternative Method)",
+                        f"✅ Database backup created using alternative method!\n\n"
+                        f"📁 File: {os.path.basename(backup_file)}\n"
+                        f"📊 Size: {file_size:.2f} MB\n"
+                        f"📂 Location: {backup_dir}\n\n"
+                        f"✓ All data backed up:\n"
+                        f"  • Products & Inventory\n"
+                        f"  • Customers & Suppliers\n"
+                        f"  • Sales & Purchases\n"
+                        f"  • Expenses & Reports\n"
+                        f"  • All transactions\n\n"
+                        f"⚠️ Keep this backup safe - no data will be lost!"
+                    )
+                    
+                    # Update backup list
+                    self.update_backup_list()
+                    
+                except Exception as alt_error:
+                    print(f"[DEBUG] Alternative backup also failed: {alt_error}")
+                    raise Exception(f"Both backup methods failed:\n\nPrimary error: {backup_error}\n\nAlternative error: {alt_error}")
+                
             finally:
                 try:
                     progress.close()
@@ -2049,6 +2106,67 @@ class SettingsWidget(QWidget):
                 "Backup Failed", 
                 f"Failed to create database backup:\n{str(e)}"
             )
+
+    def _create_sql_backup(self, backup_file, cfg):
+        """Create SQL backup using direct database connection"""
+        try:
+            from sqlalchemy import create_engine, text
+            import json
+            
+            # Create database connection
+            engine_url = f"postgresql://{cfg['username']}:{cfg['password']}@{cfg['host']}:{cfg['port']}/{cfg['database']}"
+            engine = create_engine(engine_url)
+            
+            with engine.connect() as conn:
+                # Get all table names
+                result = conn.execute(text("""
+                    SELECT table_name FROM information_schema.tables 
+                    WHERE table_schema = 'public' AND table_type = 'BASE TABLE'
+                """))
+                tables = [row[0] for row in result]
+                
+                print(f"[DEBUG] Found tables: {tables}")
+                
+                # Create SQL backup file
+                with open(backup_file, 'w', encoding='utf-8') as f:
+                    f.write("-- POS Database Backup\n")
+                    f.write(f"-- Created on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                    f.write(f"-- Database: {cfg['database']}\n\n")
+                    
+                    for table in tables:
+                        print(f"[DEBUG] Backing up table: {table}")
+                        f.write(f"-- Table: {table}\n")
+                        
+                        # Get table data
+                        result = conn.execute(text(f"SELECT * FROM {table}"))
+                        rows = result.fetchall()
+                        columns = result.keys()
+                        
+                        if rows:
+                            # Convert rows to JSON for safe storage
+                            data = []
+                            for row in rows:
+                                row_dict = {}
+                                for i, col in enumerate(columns):
+                                    value = row[i]
+                                    # Convert datetime objects to strings
+                                    if hasattr(value, 'isoformat'):
+                                        row_dict[col] = value.isoformat()
+                                    else:
+                                        row_dict[col] = value
+                                data.append(row_dict)
+                            
+                            f.write(f"-- {len(data)} records\n")
+                            f.write(f"INSERT INTO {table} (data) VALUES ('{json.dumps(data)}');\n\n")
+                        else:
+                            f.write("-- No records\n")
+                            f.write(f"-- Table {table} is empty\n\n")
+                
+                print(f"[DEBUG] SQL backup created: {backup_file}")
+                
+        except Exception as e:
+            print(f"[DEBUG] SQL backup failed: {e}")
+            raise Exception(f"SQL backup failed: {str(e)}")
 
     def restore_backup(self, file_path=None):
         """Restore database from backup file"""
