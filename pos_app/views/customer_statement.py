@@ -424,10 +424,14 @@ class CustomerStatementDialog(QDialog):
         """Export statement to PDF"""
         try:
             from PySide6.QtGui import QPainter, QPdfWriter
-            from PySide6.QtCore import QPageSize
+            from PySide6.QtPrintSupport import QPageSize
         except ImportError:
-            from PyQt6.QtGui import QPainter, QPdfWriter
-            from PyQt6.QtCore import QPageSize
+            try:
+                from PyQt6.QtGui import QPainter, QPdfWriter
+                from PyQt6.QtPrintSupport import QPageSize
+            except ImportError:
+                QMessageBox.critical(self, "Import Error", "Neither PySide6 nor PyQt6 is available for PDF export")
+                return
             
         filename = f"customer_statement_{self.customer_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
         filepath = os.path.join(self.output_dir, filename)
@@ -710,12 +714,21 @@ class CustomerStatementDialog(QDialog):
                         y_position += int(20 * base_scale)
                         painter.setFont(normal_font)
                     
-                    # Get cell data
-                    date_text = self.table.item(row, 0).text()
-                    desc_text = self.table.item(row, 1).text()
-                    debit_text = self.table.item(row, 2).text()
-                    credit_text = self.table.item(row, 3).text()
-                    balance_text = self.table.item(row, 4).text()
+                    # Get cell data with null checks
+                    date_item = self.table.item(row, 0)
+                    date_text = date_item.text() if date_item else ""
+                    
+                    desc_item = self.table.item(row, 1)
+                    desc_text = desc_item.text() if desc_item else ""
+                    
+                    debit_item = self.table.item(row, 2)
+                    debit_text = debit_item.text() if debit_item else ""
+                    
+                    credit_item = self.table.item(row, 3)
+                    credit_text = credit_item.text() if credit_item else ""
+                    
+                    balance_item = self.table.item(row, 4)
+                    balance_text = balance_item.text() if balance_item else ""
                     
                     print(f"DEBUG: Row {row}: {date_text} | {desc_text} | {debit_text} | {credit_text} | {balance_text}")
                     

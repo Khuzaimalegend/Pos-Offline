@@ -30893,3 +30893,61 @@ NoneType: None
 2025-12-25 16:08:30 | INFO | POS_ErrorLogger | POS Application Started - 2025-12-25 16:08:30.748028
 2025-12-25 16:08:30 | INFO | POS_ErrorLogger | ================================================================================
 2025-12-25 16:08:30 | INFO | POS_ErrorLogger | [STARTUP] Error logging system initialized
+2025-12-25 19:06:03 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:06:03 | INFO | POS_ErrorLogger | POS Application Started - 2025-12-25 19:06:03.492433
+2025-12-25 19:06:03 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:06:03 | INFO | POS_ErrorLogger | [STARTUP] Error logging system initialized
+2025-12-25 19:10:36 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:10:36 | INFO | POS_ErrorLogger | POS Application Started - 2025-12-25 19:10:36.579130
+2025-12-25 19:10:36 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:10:36 | INFO | POS_ErrorLogger | [STARTUP] Error logging system initialized
+2025-12-25 19:16:59 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:16:59 | INFO | POS_ErrorLogger | POS Application Started - 2025-12-25 19:16:59.717890
+2025-12-25 19:16:59 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:16:59 | INFO | POS_ErrorLogger | [STARTUP] Error logging system initialized
+2025-12-25 19:24:53 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:24:53 | INFO | POS_ErrorLogger | POS Application Started - 2025-12-25 19:24:53.531143
+2025-12-25 19:24:53 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:24:53 | INFO | POS_ErrorLogger | [STARTUP] Error logging system initialized
+2025-12-25 19:27:49 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:27:49 | INFO | POS_ErrorLogger | POS Application Started - 2025-12-25 19:27:49.148649
+2025-12-25 19:27:49 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:27:49 | INFO | POS_ErrorLogger | [STARTUP] Error logging system initialized
+2025-12-25 19:29:38 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:29:38 | INFO | POS_ErrorLogger | POS Application Started - 2025-12-25 19:29:38.148106
+2025-12-25 19:29:38 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:29:38 | INFO | POS_ErrorLogger | [STARTUP] Error logging system initialized
+2025-12-25 19:37:43 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:37:43 | INFO | POS_ErrorLogger | POS Application Started - 2025-12-25 19:37:43.810250
+2025-12-25 19:37:43 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:37:43 | INFO | POS_ErrorLogger | [STARTUP] Error logging system initialized
+2025-12-25 19:38:08 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:38:08 | INFO | POS_ErrorLogger | POS Application Started - 2025-12-25 19:38:08.909317
+2025-12-25 19:38:08 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:38:08 | INFO | POS_ErrorLogger | [STARTUP] Error logging system initialized
+2025-12-25 19:39:20 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:39:20 | INFO | POS_ErrorLogger | POS Application Started - 2025-12-25 19:39:20.748406
+2025-12-25 19:39:20 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:39:20 | INFO | POS_ErrorLogger | [STARTUP] Error logging system initialized
+2025-12-25 19:43:03 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:43:03 | INFO | POS_ErrorLogger | POS Application Started - 2025-12-25 19:43:03.106516
+2025-12-25 19:43:03 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:43:03 | INFO | POS_ErrorLogger | [STARTUP] Error logging system initialized
+2025-12-25 19:47:15 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:47:15 | INFO | POS_ErrorLogger | POS Application Started - 2025-12-25 19:47:15.913719
+2025-12-25 19:47:15 | INFO | POS_ErrorLogger | ================================================================================
+2025-12-25 19:47:15 | INFO | POS_ErrorLogger | [STARTUP] Error logging system initialized
+2025-12-25 19:49:15 | ERROR | POS_ErrorLogger | 
+================================================================================
+ERROR OCCURRED
+Time: 2025-12-25 19:49:15.906213
+Module: MAIN
+Context: UNCAUGHT_EXCEPTION
+Error Type: ModuleNotFoundError
+Error Message: No module named 'PyQt6'
+================================================================================
+Traceback:
+NoneType: None
+
+================================================================================
+

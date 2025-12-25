@@ -411,6 +411,126 @@ class CustomersWidget(QWidget):
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to print customers: {str(e)}")
     
+    def print_customer_receipt(self, customer_id):
+        """Print individual customer receipt with printer selection"""
+        try:
+            # Show print dialog for printer selection
+            dialog = CustomerPrintDialog(self, None)
+            dialog.setWindowTitle("Print Customer Receipt")
+            # Update info label for receipt
+            if hasattr(dialog, 'info_label'):
+                dialog.info_label.setText("Print Individual Customer Receipt")
+            if dialog.exec() == QDialog.Accepted:
+                # Get selected printer and print receipt
+                printer_name = dialog.get_selected_printer()
+                self._do_print_customer_receipt(customer_id, printer_name)
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to print customer receipt: {str(e)}")
+    
+    def _do_print_customer_receipt(self, customer_id, printer_name):
+        """Print individual customer receipt"""
+        try:
+            from PySide6.QtPrintSupport import QPrinter, QPrinterInfo
+            from PySide6.QtGui import QPageSize, QPainter, QFont, QPageLayout
+            from PySide6.QtCore import Qt, QMarginsF
+        except ImportError:
+            from PyQt6.QtPrintSupport import QPrinter, QPrinterInfo
+            from PyQt6.QtGui import QPageSize, QPainter, QFont, QPageLayout
+            from PyQt6.QtCore import Qt, QMarginsF
+        
+        try:
+            # Get customer data
+            from pos_app.models.database import Customer
+            customer = self.controller.session.get(Customer, customer_id)
+            if not customer:
+                QMessageBox.warning(self, "Error", "Customer not found")
+                return
+            
+            # Create printer
+            printer = QPrinter()
+            printer.setPageSize(QPageSize(QPageSize.A4))
+            printer.setPageOrientation(QPageLayout.Orientation.Portrait)
+            printer.setResolution(300)
+            
+            # Set printer name
+            if printer_name and printer_name != "Default":
+                printer.setPrinterName(printer_name)
+            else:
+                printers = QPrinterInfo.availablePrinters()
+                if printers:
+                    printer.setPrinterName(printers[0].printerName())
+            
+            # Create painter
+            painter = QPainter(printer)
+            if not painter.isActive():
+                QMessageBox.critical(self, "Print Error", "Failed to initialize printer")
+                return
+            
+            # Get page dimensions
+            width = painter.device().width()
+            height = painter.device().height()
+            
+            # Set fonts
+            title_font = QFont("Arial", 16, QFont.Bold)
+            header_font = QFont("Arial", 12, QFont.Bold)
+            normal_font = QFont("Arial", 10)
+            
+            # Start printing
+            y_position = 50
+            
+            # Store name
+            painter.setFont(title_font)
+            store_name = "Sarhad General Store"
+            painter.drawText(width // 2 - painter.fontMetrics().horizontalAdvance(store_name) // 2, y_position, store_name)
+            y_position += 50
+            
+            # Title
+            painter.setFont(header_font)
+            title_text = "CUSTOMER RECEIPT"
+            painter.drawText(width // 2 - painter.fontMetrics().horizontalAdvance(title_text) // 2, y_position, title_text)
+            y_position += 50
+            
+            # Customer details
+            painter.setFont(normal_font)
+            details = [
+                f"Name: {customer.name or 'N/A'}",
+                f"Type: {customer.name or 'N/A'}",
+                f"Contact: {customer.contact or 'N/A'}",
+                f"Email: {customer.email or 'N/A'}",
+                f"Address: {customer.address or 'N/A'}",
+                f"Credit Limit: Rs {customer.credit_limit or 0:,.2f}",
+                f"Current Balance: Rs {customer.balance or 0:,.2f}"
+            ]
+            
+            for detail in details:
+                painter.drawText(50, y_position, detail)
+                y_position += 25
+            
+            # Payment section
+            y_position += 20
+            painter.setFont(header_font)
+            painter.drawText(50, y_position, "Payment Details:")
+            y_position += 30
+            
+            painter.setFont(normal_font)
+            painter.drawText(50, y_position, "Amount Paid: _________________")
+            y_position += 30
+            painter.drawText(50, y_position, "Payment Method: _____________")
+            y_position += 30
+            painter.drawText(50, y_position, "Signature: ___________________")
+            
+            # Footer
+            y_position = height - 80
+            from datetime import datetime
+            footer_text = f"Printed on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+            painter.drawText(width // 2 - painter.fontMetrics().horizontalAdvance(footer_text) // 2, y_position, footer_text)
+            
+            painter.end()
+            QMessageBox.information(self, "Print Complete", "Customer receipt printed successfully!")
+            
+        except Exception as e:
+            QMessageBox.critical(self, "Print Error", f"Failed to print receipt: {str(e)}")
+    
     def _do_print_all_customers(self, printer_name):
         """Print all customers in table format without dialogs"""
         try:
@@ -501,42 +621,50 @@ class CustomersWidget(QWidget):
             print(f"[DEBUG] Printer DPI: {dpi}, Scale: {scale}")
             
             # Use fixed font sizes that work regardless of printer DPI
-            store_font = QFont("Arial", 14, QFont.Bold)
-            title_font = QFont("Arial", 12, QFont.Bold)
-            header_font = QFont("Arial", 10, QFont.Bold)
-            normal_font = QFont("Arial", 9)
+            store_font = QFont("Arial", 18, QFont.Bold)  # H2 size
+            title_font = QFont("Arial", 16, QFont.Bold)  # H3 size
+            header_font = QFont("Arial", 12, QFont.Bold)
+            normal_font = QFont("Arial", 10)
             
-            # Use reasonable margins to utilize full page width
+            # Use reasonable margins with proper top spacing
             margin = 50  # Fixed 50 pixel margin
+            top_space = 100  # Fixed 100 pixels from top for header
             left_margin = margin
             right_margin = width - margin
-            y_position = margin
+            y_position = top_space  # Start 100 pixels from top
             
             # Store Name
             painter.setFont(store_font)
             store_name = "Sarhad General Store"
             store_width = painter.fontMetrics().horizontalAdvance(store_name)
+            # Draw box around store name
+            store_box_width = store_width + 60
+            store_box_x = width // 2 - store_box_width // 2
+            painter.drawRect(store_box_x, y_position - 40, store_box_width, 70)
             painter.drawText(width // 2 - store_width // 2, y_position, store_name)
-            y_position += 30
+            y_position += 150
             
             # Title
             painter.setFont(title_font)
             title_text = "CUSTOMER LIST"
             title_width = painter.fontMetrics().horizontalAdvance(title_text)
+            # Draw box around title
+            title_box_width = title_width + 60
+            title_box_x = width // 2 - title_box_width // 2
+            painter.drawRect(title_box_x, y_position - 40, title_box_width, 70)
             painter.drawText(width // 2 - title_width // 2, y_position, title_text)
-            y_position += 30
+            y_position += 120
             
-            # Table headers - New structure: Invoice ID, Name, Previous Balance, Last Paid, New Balance, Now Paid
+            # Table headers - New structure without Invoice ID: Name, Previous Balance, Last Paid, New Balance, Now Paid
             painter.setFont(header_font)
-            headers = ["Invoice ID", "Name", "Previous Balance", "Last Paid", "New Balance", "Now Paid"]
+            headers = ["Name", "Previous Balance", "Last Paid", "New Balance", "Now Paid"]
             
             # Calculate column positions with proportional widths
             usable_width = right_margin - left_margin
-            # Invoice ID: 12%, Name: 25%, Previous Balance: 18%, Last Paid: 15%, New Balance: 15%, Now Paid: 15%
+            # Name: 35%, Previous Balance: 20%, Last Paid: 15%, New Balance: 15%, Now Paid: 15%
             col_widths = [
-                usable_width * 0.12,  # Invoice ID
-                usable_width * 0.25,  # Name
-                usable_width * 0.18,  # Previous Balance
+                usable_width * 0.35,  # Name
+                usable_width * 0.20,  # Previous Balance
                 usable_width * 0.15,  # Last Paid
                 usable_width * 0.15,  # New Balance
                 usable_width * 0.15   # Now Paid
@@ -550,22 +678,27 @@ class CustomersWidget(QWidget):
             print(f"DEBUG: Column positions: {x_positions}")
             print(f"DEBUG: Column widths: {col_widths}")
             
-            # Draw headers with grid lines
+            # Draw headers with grid lines and boxes
             for i, header in enumerate(headers):
-                painter.drawText(int(x_positions[i]), y_position, header)
+                # Draw box around each header
+                header_box_height = 35
+                painter.drawRect(int(x_positions[i]), y_position - 25, int(col_widths[i]), header_box_height)
+                painter.drawText(int(x_positions[i]) + 5, y_position, header)
                 # Draw vertical grid lines
                 if i < len(headers) - 1:
-                    painter.drawLine(int(x_positions[i+1]), y_position - 5, int(x_positions[i+1]), y_position + 10)
-            y_position += 20
+                    painter.drawLine(int(x_positions[i+1]), y_position - 25, int(x_positions[i+1]), y_position + 10)
+            y_position += 50
             
             # Draw horizontal line under headers
             painter.drawLine(int(left_margin), y_position, int(right_margin), y_position)
-            y_position += 15
+            y_position += 40
             
             # Table data with grid lines
             painter.setFont(normal_font)
-            row_height = 25  # Fixed 25 pixel row height
-            header_footer_space = 200  # Fixed space for header and footer
+            # Calculate dynamic row height based on font size with maximum extra spacing
+            font_metrics = painter.fontMetrics()
+            row_height = font_metrics.height() + 55  # Font height + maximum extra padding
+            header_footer_space = 350  # More space for header and footer
             max_rows_per_page = (height - header_footer_space) // row_height
             current_row = 0
             
@@ -591,48 +724,43 @@ class CustomersWidget(QWidget):
                 
                 # Get customer data
                 try:
-                    customer_id = self.table.item(row, 0).text() if self.table.item(row, 0) else ""
-                    customer_name = self.table.item(row, 1).text() if self.table.item(row, 1) else ""
-                    customer_balance = self.table.item(row, 4).text() if self.table.item(row, 4) else "0"
+                    customer_name = self.table.item(row, 0).text() if self.table.item(row, 0) else ""
+                    customer_credit_limit = self.table.item(row, 4).text() if self.table.item(row, 4) else "0"
+                    customer_balance = self.table.item(row, 5).text() if self.table.item(row, 5) else "0"
                     
-                    print(f"DEBUG: Row {row}: ID={customer_id}, Name={customer_name}, Balance={customer_balance}")
+                    print(f"DEBUG: Row {row}: Name={customer_name}, Balance={customer_balance}")
                 except Exception as e:
                     print(f"ERROR reading row {row}: {e}")
                     continue
                 
-                # Draw customer data with proper positioning and truncation
-                # Column 1: Invoice ID (customer ID)
-                invoice_id_text = customer_id[:10]
-                painter.drawText(int(x_positions[0]), y_position, invoice_id_text)
-                
-                # Column 2: Name - truncate to fit
-                max_name_width = col_widths[1] - 5
+                # Draw customer data with boxes around each cell
+                # Column 1: Name - truncate to fit
+                max_name_width = col_widths[0] - 10
                 truncated_name = customer_name
                 while painter.fontMetrics().horizontalAdvance(truncated_name) > max_name_width and len(truncated_name) > 3:
                     truncated_name = truncated_name[:-1]
-                painter.drawText(int(x_positions[1]), y_position, truncated_name)
+                # Draw box and text
+                painter.drawRect(int(x_positions[0]), y_position - 5, int(col_widths[0]), row_height - 5)
+                painter.drawText(int(x_positions[0]) + 5, y_position, truncated_name)
                 
-                # Column 3: Previous Balance (current balance from table)
-                if customer_balance.strip():
-                    painter.drawText(int(x_positions[2]), y_position, customer_balance)
-                else:
-                    painter.drawText(int(x_positions[2]), y_position, "0")
+                # Column 2: Previous Balance (credit limit from table)
+                balance_text = customer_credit_limit if customer_credit_limit.strip() else "0"
+                painter.drawRect(int(x_positions[1]), y_position - 5, int(col_widths[1]), row_height - 5)
+                painter.drawText(int(x_positions[1]) + 5, y_position, balance_text)
                 
-                # Column 4: Last Paid (empty for manual entry)
-                painter.drawText(int(x_positions[3]), y_position, "_____")
+                # Column 3: Last Paid (show current balance as last paid)
+                last_paid_text = customer_balance if customer_balance.strip() else "0"
+                painter.drawRect(int(x_positions[2]), y_position - 5, int(col_widths[2]), row_height - 5)
+                painter.drawText(int(x_positions[2]) + 5, y_position, last_paid_text)
                 
-                # Column 5: New Balance (empty for manual entry)
-                painter.drawText(int(x_positions[4]), y_position, "_____")
+                # Column 4: New Balance (show credit limit as new balance)
+                new_balance_text = customer_credit_limit if customer_credit_limit.strip() else "0"
+                painter.drawRect(int(x_positions[3]), y_position - 5, int(col_widths[3]), row_height - 5)
+                painter.drawText(int(x_positions[3]) + 5, y_position, new_balance_text)
                 
-                # Column 6: Now Paid (empty for manual entry)
-                painter.drawText(int(x_positions[5]), y_position, "_____")
-                
-                # Draw horizontal grid line after each row
-                painter.drawLine(int(left_margin), y_position + 3, int(right_margin), y_position + 3)
-                
-                # Draw vertical grid lines for each column
-                for i in range(1, len(headers)):
-                    painter.drawLine(int(x_positions[i]), y_position - 3, int(x_positions[i]), y_position + 3)
+                # Column 5: Now Paid (empty for manual entry)
+                painter.drawRect(int(x_positions[4]), y_position - 5, int(col_widths[4]), row_height - 5)
+                painter.drawText(int(x_positions[4]) + 5, y_position, "_____")
                 
                 y_position += row_height
                 current_row += 1
