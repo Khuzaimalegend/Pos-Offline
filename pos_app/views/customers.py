@@ -531,7 +531,7 @@ class CustomersWidget(QWidget):
         except Exception as e:
             QMessageBox.critical(self, "Print Error", f"Failed to print receipt: {str(e)}")
     
-    def _do_print_all_customers(self, printer_name):
+    def _do_print_all_customers(self, printer_name="Default"):
         """Print all customers in table format without dialogs"""
         try:
             from PySide6.QtPrintSupport import QPrinter, QPrinterInfo

@@ -719,9 +719,21 @@ class CustomerStatementDialog(QDialog):
                         "subtotal": self._format_currency(subtotal)
                     })
 
-        total_sales = sum(getattr(sale, 'total_amount', 0) or 0 for sale in sales[:1])  # Only the latest sale
-        total_payments = total_sales  # Use sales total as payments for balance calc
-        balance = 0.0  # No payments, so balance is always 0
+        # Calculate totals properly
+        total_sales = sum(getattr(sale, 'total_amount', 0) or 0 for sale in sales)
+        
+        # Get all payments made by this customer in the date range
+        payments = session.query(Payment).filter(
+            Payment.customer_id == self.customer_id,
+            Payment.payment_date >= start_dt,
+            Payment.payment_date <= end_dt,
+            Payment.status == 'COMPLETED'
+        ).all()
+        
+        total_payments = sum(getattr(payment, 'amount', 0) or 0 for payment in payments)
+        
+        # Amount due = total sales - total payments
+        balance = total_sales - total_payments
 
         return {
             "sale_rows": sale_rows,

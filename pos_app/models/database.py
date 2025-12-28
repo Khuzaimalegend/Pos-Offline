@@ -537,7 +537,8 @@ class Product(Base):
     # Separate warehouse and retail stock
     warehouse_stock = Column(Integer, default=0)
     retail_stock = Column(Integer, default=0)
-    stock_level = Column(Integer, default=0)  # Total stock (computed)
+    # stock_level is now computed as warehouse_stock + retail_stock
+    stock_level = Column(Integer, default=0)  # Kept for backward compatibility but should be computed
     reorder_level = Column(Integer, default=10)
     low_stock_alert = Column(Boolean, default=True)
     max_stock = Column(Integer)
@@ -764,7 +765,8 @@ class BankTransaction(Base):
     bank_account_id = Column(Integer, ForeignKey('bank_accounts.id'), nullable=False)
     transaction_date = Column(DateTime, default=datetime.now, nullable=False)
     amount = Column(Float, nullable=False)
-    balance_after = Column(Float, nullable=False)
+    # balance_after should be computed from account balance, not stored
+    balance_after = Column(Float, nullable=False)  # Kept for compatibility but should be computed
     transaction_type = Column(Enum(TransactionType), nullable=False)
     # reference = Column(String(100))  # Column doesn't exist in database
     description = Column(String(255))

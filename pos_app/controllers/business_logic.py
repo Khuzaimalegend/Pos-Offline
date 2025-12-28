@@ -209,19 +209,24 @@ class BusinessController:
             
             # Update stock level
             if movement_type == 'IN':
-                product.stock_level = int(product.stock_level or 0) + qty
-            else:
-                product.stock_level = int(product.stock_level or 0) - qty
-            # Update per-location when provided
-            if location is not None:
-                try:
-                    from pos_app.models.database import InventoryLocation
-                    if location == InventoryLocation.WAREHOUSE:
-                        product.warehouse_stock = int(product.warehouse_stock or 0) + (qty if movement_type == 'IN' else -qty)
-                    elif location == InventoryLocation.RETAIL:
-                        product.retail_stock = int(product.retail_stock or 0) + (qty if movement_type == 'IN' else -qty)
-                except Exception:
-                    pass
+                if location is None:
+                    # General stock movement - add to retail by default
+                    product.retail_stock = int(product.retail_stock or 0) + qty
+                elif location == InventoryLocation.WAREHOUSE:
+                    product.warehouse_stock = int(product.warehouse_stock or 0) + qty
+                elif location == InventoryLocation.RETAIL:
+                    product.retail_stock = int(product.retail_stock or 0) + qty
+            else:  # OUT
+                if location is None:
+                    # General stock movement - subtract from retail by default
+                    product.retail_stock = int(product.retail_stock or 0) - qty
+                elif location == InventoryLocation.WAREHOUSE:
+                    product.warehouse_stock = int(product.warehouse_stock or 0) - qty
+                elif location == InventoryLocation.RETAIL:
+                    product.retail_stock = int(product.retail_stock or 0) - qty
+            
+            # Update total stock_level as sum of warehouse + retail
+            product.stock_level = int(product.warehouse_stock or 0) + int(product.retail_stock or 0)
             
             # Record movement
             # Convert location enum to string if needed
