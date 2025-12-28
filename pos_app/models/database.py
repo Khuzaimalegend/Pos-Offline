@@ -695,12 +695,12 @@ class PurchasePayment(Base):
     payment_method = Column(String(20))
     status = Column(String(20), default='COMPLETED')
     reference = Column(String(100))
-    # bank_account_id = Column(Integer, ForeignKey('bank_accounts.id'))  # TODO: Add this column to database
+    bank_account_id = Column(Integer, ForeignKey('bank_accounts.id'))
     notes = Column(Text)
 
     purchase = relationship("Purchase", back_populates="payments")
     supplier = relationship("Supplier")
-    # bank_account = relationship("BankAccount")  # TODO: Re-enable after adding column
+    bank_account = relationship("BankAccount")
 
 class PurchaseItem(Base):
     __tablename__ = 'purchase_items'

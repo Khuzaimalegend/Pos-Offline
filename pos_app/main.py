@@ -411,13 +411,43 @@ def main():
         # Don't use fallback stylesheet as it contains problematic CSS
         print("Using minimal styling to avoid CSS warnings")
 
-    # Show login dialog
-    from pos_app.views.login import LoginDialog
-    from pos_app.utils.network_manager import set_client_mode, read_network_config
-    
     login_dialog = LoginDialog()
     if login_dialog.exec() == LoginDialog.Accepted:
         # User logged in successfully
+        
+        # Check PostgreSQL installation and setup
+        try:
+            from pos_app.views.postgres_setup import is_postgresql_installed, is_database_available, PostgreSQLSetupDialog
+            
+            # Only check if database is not already available (to avoid data loss)
+            if not is_database_available():
+                if not is_postgresql_installed():
+                    print("[POSTGRESQL] PostgreSQL not found, showing setup dialog...")
+                    setup_dialog = PostgreSQLSetupDialog()
+                    if setup_dialog.exec() == PostgreSQLSetupDialog.Accepted:
+                        print("[POSTGRESQL] Setup completed, reinitializing database connection...")
+                        # Reinitialize database connection after setup
+                        from pos_app.database.connection import Database
+                        db = Database()
+                        if not db._is_offline:
+                            print("[SUCCESS] Database connection re-established after PostgreSQL setup")
+                        else:
+                            QMessageBox.warning(None, "Database Issue", 
+                                              "PostgreSQL setup completed but database connection failed. Please restart the application.")
+                            sys.exit(1)
+                    else:
+                        print("[POSTGRESQL] Setup cancelled by user")
+                        QMessageBox.information(None, "Setup Cancelled", 
+                                              "PostgreSQL setup was cancelled. The application will exit.")
+                        sys.exit(0)
+                else:
+                    print("[POSTGRESQL] PostgreSQL found but database not set up, will use existing setup")
+            else:
+                print("[POSTGRESQL] Database already available, skipping setup")
+                
+        except Exception as e:
+            print(f"[POSTGRESQL] Setup check failed: {e}")
+            # Continue anyway - maybe database is already working
         
         # Store logged-in user in controllers if auth controller exists
         try:

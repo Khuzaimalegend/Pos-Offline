@@ -431,7 +431,7 @@ class CustomersWidget(QWidget):
         """Print individual customer receipt"""
         try:
             from PySide6.QtPrintSupport import QPrinter, QPrinterInfo
-            from PySide6.QtGui import QPageSize, QPainter, QFont, QPageLayout
+            from PySide6.QtGui import QPageSize, QPainter, QFont, QColor, QPageLayout
             from PySide6.QtCore import Qt, QMarginsF
         except ImportError:
             from PyQt6.QtPrintSupport import QPrinter, QPrinterInfo
@@ -535,7 +535,7 @@ class CustomersWidget(QWidget):
         """Print all customers in table format without dialogs"""
         try:
             from PySide6.QtPrintSupport import QPrinter, QPrinterInfo
-            from PySide6.QtGui import QPageSize, QPainter, QFont, QPageLayout
+            from PySide6.QtGui import QPageSize, QPainter, QFont, QColor, QPageLayout
             from PySide6.QtCore import Qt, QMarginsF
         except ImportError:
             from PyQt6.QtPrintSupport import QPrinter, QPrinterInfo
@@ -633,27 +633,39 @@ class CustomersWidget(QWidget):
             right_margin = width - margin
             y_position = top_space  # Start 100 pixels from top
             
-            # Store Name
+            # Store Name with light gray background
             painter.setFont(store_font)
             store_name = "Sarhad General Store"
             store_width = painter.fontMetrics().horizontalAdvance(store_name)
-            # Draw box around store name
-            store_box_width = store_width + 60
-            store_box_x = width // 2 - store_box_width // 2
-            painter.drawRect(store_box_x, y_position - 40, store_box_width, 70)
-            painter.drawText(width // 2 - store_width // 2, y_position, store_name)
-            y_position += 150
+            store_height = painter.fontMetrics().height()
+            # Draw light gray background box
+            store_box_width = width - 2 * margin  # Full width minus margins
+            store_box_height = store_height + 40  # Height with padding
+            store_box_x = margin
+            store_box_y = y_position - 20
+            painter.fillRect(store_box_x, store_box_y, store_box_width, store_box_height, QColor(240, 240, 240))  # Very light gray
+            painter.drawRect(store_box_x, store_box_y, store_box_width, store_box_height)
+            # Center the text horizontally and vertically in the box
+            text_x = width // 2 - store_width // 2
+            text_y = store_box_y + (store_box_height + store_height) // 2 - 5
+            painter.drawText(text_x, text_y, store_name)
+            y_position += store_box_height + 30
             
-            # Title
+            # Title with center alignment
             painter.setFont(title_font)
             title_text = "CUSTOMER LIST"
             title_width = painter.fontMetrics().horizontalAdvance(title_text)
-            # Draw box around title
+            title_height = painter.fontMetrics().height()
+            # Center the title horizontally and vertically
             title_box_width = title_width + 60
+            title_box_height = title_height + 40
             title_box_x = width // 2 - title_box_width // 2
-            painter.drawRect(title_box_x, y_position - 40, title_box_width, 70)
-            painter.drawText(width // 2 - title_width // 2, y_position, title_text)
-            y_position += 120
+            title_box_y = y_position - 20
+            painter.drawRect(title_box_x, title_box_y, title_box_width, title_box_height)
+            text_x = width // 2 - title_width // 2
+            text_y = title_box_y + (title_box_height + title_height) // 2 - 5
+            painter.drawText(text_x, text_y, title_text)
+            y_position += title_box_height + 30
             
             # Table headers - New structure without Invoice ID: Name, Previous Balance, Last Paid, New Balance, Now Paid
             painter.setFont(header_font)
@@ -678,12 +690,16 @@ class CustomersWidget(QWidget):
             print(f"DEBUG: Column positions: {x_positions}")
             print(f"DEBUG: Column widths: {col_widths}")
             
-            # Draw headers with grid lines and boxes
+            # Draw headers with grid lines and boxes - center aligned
             for i, header in enumerate(headers):
                 # Draw box around each header
                 header_box_height = 35
                 painter.drawRect(int(x_positions[i]), y_position - 25, int(col_widths[i]), header_box_height)
-                painter.drawText(int(x_positions[i]) + 5, y_position, header)
+                # Center text horizontally within the cell
+                header_width = painter.fontMetrics().horizontalAdvance(header)
+                text_x = int(x_positions[i]) + (int(col_widths[i]) - header_width) // 2
+                text_y = y_position
+                painter.drawText(text_x, text_y, header)
                 # Draw vertical grid lines
                 if i < len(headers) - 1:
                     painter.drawLine(int(x_positions[i+1]), y_position - 25, int(x_positions[i+1]), y_position + 10)
@@ -736,8 +752,18 @@ class CustomersWidget(QWidget):
                         if customer:
                             # Previous Balance: Show current balance as previous balance
                             previous_balance = getattr(customer, 'current_credit', 0.0) or 0.0
-                            # Last Paid: For now, show 0 or calculate from payments (simplified)
-                            last_paid = 0.0  # TODO: Calculate from actual payment history
+                            # Last Paid: Calculate from actual payment history
+                            try:
+                                from pos_app.models.database import Payment
+                                # Get the most recent payment for this customer
+                                last_payment = self.controller.session.query(Payment)\
+                                    .filter(Payment.customer_id == customer_id)\
+                                    .filter(Payment.amount > 0)\
+                                    .order_by(Payment.payment_date.desc())\
+                                    .first()
+                                last_paid = last_payment.amount if last_payment else 0.0
+                            except Exception:
+                                last_paid = 0.0  # Fallback to 0 if payment history unavailable
                         else:
                             previous_balance = 0.0
                             last_paid = 0.0
@@ -750,45 +776,63 @@ class CustomersWidget(QWidget):
                     print(f"ERROR reading row {row}: {e}")
                     continue
                 
-                # Draw customer data with boxes around each cell
-                # Column 1: Name - truncate to fit
+                # Draw customer data with boxes around each cell - center aligned
+                # Column 1: Name - truncate to fit and center
                 max_name_width = col_widths[0] - 10
                 truncated_name = customer_name
                 while painter.fontMetrics().horizontalAdvance(truncated_name) > max_name_width and len(truncated_name) > 3:
                     truncated_name = truncated_name[:-1]
-                # Draw box and text
+                # Draw box and center text
                 painter.drawRect(int(x_positions[0]), y_position - 5, int(col_widths[0]), row_height - 5)
-                painter.drawText(int(x_positions[0]) + 5, y_position, truncated_name)
+                text_width = painter.fontMetrics().horizontalAdvance(truncated_name)
+                text_x = int(x_positions[0]) + (int(col_widths[0]) - text_width) // 2
+                text_y = y_position + (row_height - painter.fontMetrics().height()) // 2
+                painter.drawText(text_x, text_y, truncated_name)
                 
-                # Column 2: Previous Balance
+                # Column 2: Previous Balance - center aligned
                 balance_text = f"{previous_balance:.2f}"
                 painter.drawRect(int(x_positions[1]), y_position - 5, int(col_widths[1]), row_height - 5)
-                painter.drawText(int(x_positions[1]) + 5, y_position, balance_text)
+                text_width = painter.fontMetrics().horizontalAdvance(balance_text)
+                text_x = int(x_positions[1]) + (int(col_widths[1]) - text_width) // 2
+                text_y = y_position + (row_height - painter.fontMetrics().height()) // 2
+                painter.drawText(text_x, text_y, balance_text)
                 
-                # Column 3: Last Paid
+                # Column 3: Last Paid - center aligned
                 last_paid_text = f"{last_paid:.2f}"
                 painter.drawRect(int(x_positions[2]), y_position - 5, int(col_widths[2]), row_height - 5)
-                painter.drawText(int(x_positions[2]) + 5, y_position, last_paid_text)
+                text_width = painter.fontMetrics().horizontalAdvance(last_paid_text)
+                text_x = int(x_positions[2]) + (int(col_widths[2]) - text_width) // 2
+                text_y = y_position + (row_height - painter.fontMetrics().height()) // 2
+                painter.drawText(text_x, text_y, last_paid_text)
                 
-                # Column 4: New Balance (current balance)
+                # Column 4: New Balance (current balance) - center aligned
                 new_balance_text = f"{previous_balance:.2f}"  # Same as previous for now
                 painter.drawRect(int(x_positions[3]), y_position - 5, int(col_widths[3]), row_height - 5)
-                painter.drawText(int(x_positions[3]) + 5, y_position, new_balance_text)
+                text_width = painter.fontMetrics().horizontalAdvance(new_balance_text)
+                text_x = int(x_positions[3]) + (int(col_widths[3]) - text_width) // 2
+                text_y = y_position + (row_height - painter.fontMetrics().height()) // 2
+                painter.drawText(text_x, text_y, new_balance_text)
                 
-                # Column 5: Now Paid (empty for manual entry)
+                # Column 5: Now Paid (empty for manual entry) - center aligned
+                now_paid_text = "_____"
                 painter.drawRect(int(x_positions[4]), y_position - 5, int(col_widths[4]), row_height - 5)
-                painter.drawText(int(x_positions[4]) + 5, y_position, "_____")
+                text_width = painter.fontMetrics().horizontalAdvance(now_paid_text)
+                text_x = int(x_positions[4]) + (int(col_widths[4]) - text_width) // 2
+                text_y = y_position + (row_height - painter.fontMetrics().height()) // 2
+                painter.drawText(text_x, text_y, now_paid_text)
                 
                 y_position += row_height
                 current_row += 1
                 
             print(f"DEBUG: Printed {current_row} rows total")
             
-            # Footer
+            # Footer - center aligned
             painter.setFont(normal_font)
             from datetime import datetime
             footer_text = f"Printed on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Total Customers: {self.table.rowCount()}"
-            painter.drawText(width // 2 - painter.fontMetrics().horizontalAdvance(footer_text) // 2, height - 40, footer_text)
+            footer_width = painter.fontMetrics().horizontalAdvance(footer_text)
+            footer_x = width // 2 - footer_width // 2
+            painter.drawText(footer_x, height - 40, footer_text)
             
             painter.end()
             print("DEBUG: All customers print completed successfully")

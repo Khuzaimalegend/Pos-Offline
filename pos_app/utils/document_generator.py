@@ -101,7 +101,27 @@ class DocumentGenerator:
             f.write(f"Subtotal: {subtotal:>10.2f}\n")
             f.write(f"VAT:      {vat:>10.2f}\n")
             f.write(f"TOTAL:    {grand:>10.2f}\n")
-            f.write(f"CASH:     {cash:>10.2f}\n")
+            
+            # Get payment method - check sale first, then payments
+            payment_method = getattr(sale, "payment_method", "CASH") or "CASH"
+            
+            # If sale has payments, get method from the first payment
+            if hasattr(sale, "payments") and sale.payments:
+                for payment in sale.payments:
+                    if hasattr(payment, "payment_method") and payment.payment_method:
+                        payment_method = payment.payment_method
+                        break
+            
+            # If sale has payment splits, get method from the first split
+            if hasattr(sale, "payment_splits") and sale.payment_splits:
+                for split in sale.payment_splits:
+                    if hasattr(split, "payment_method") and split.payment_method:
+                        payment_method = split.payment_method
+                        break
+            
+            # Format payment method for display
+            payment_display = payment_method.upper().replace('_', ' ')
+            f.write(f"{payment_display}:    {cash:>10.2f}\n")
             f.write(f"CHANGE:   {change:>10.2f}\n")
             f.write("=" * 40 + "\n")
             f.write("Thank you, come again!\n")

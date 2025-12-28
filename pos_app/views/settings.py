@@ -1974,7 +1974,7 @@ class SettingsWidget(QWidget):
             os.makedirs(backup_dir, exist_ok=True)
             
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            backup_file = os.path.join(backup_dir, f"pos_backup_{timestamp}.backup")
+            backup_file = os.path.join(backup_dir, f"pos_backup_{timestamp}.sql")
 
             cfg = self._get_active_db_connection_info()
             
@@ -2016,7 +2016,7 @@ class SettingsWidget(QWidget):
                 '--clean',  # Include DROP statements
                 '--create',  # Include CREATE DATABASE statement
                 '--if-exists',  # Use IF EXISTS for DROP statements
-                '-F', 'c',  # Custom format (compressed)
+                '-F', 'p',  # Plain SQL format
                 '-b',  # Include large objects
                 '-v',  # Verbose mode
                 '-f', str(backup_file)
@@ -2470,7 +2470,7 @@ class SettingsWidget(QWidget):
 
             backup_dir = self._resolve_backup_dir()
             timestamp = now.strftime('%Y%m%d_%H%M%S')
-            backup_file = os.path.join(backup_dir, f"pos_backup_{timestamp}.backup")
+            backup_file = os.path.join(backup_dir, f"pos_backup_{timestamp}.sql")
 
             cfg = self._get_active_db_connection_info()
             env = os.environ.copy()
@@ -2485,7 +2485,7 @@ class SettingsWidget(QWidget):
                 '-d', str(cfg.get('database')),
                 '--no-owner',
                 '--no-privileges',
-                '-F', 'c',
+                '-F', 'p',
                 '-f', str(backup_file)
             ]
             self._run_pg_command(cmd, env=env)
