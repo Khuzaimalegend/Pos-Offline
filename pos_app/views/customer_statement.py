@@ -1,23 +1,31 @@
+import os
+import html
+
 try:
     from PySide6.QtWidgets import (
         QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
         QTableWidget, QTableWidgetItem, QComboBox, QLineEdit, QDateEdit,
         QFrame, QMessageBox, QGroupBox, QFormLayout, QHeaderView, QAbstractItemView
     )
-    from PySide6.QtCore import Qt, QDate
-    from PySide6.QtGui import QFont, QColor
+    from PySide6.QtPrintSupport import QPrinter, QPrintDialog
+    from PySide6.QtGui import QFont, QColor, QPageSize, QPageLayout, QTextDocument
+    from PySide6.QtCore import Qt, QDate, QRect, QSizeF, QMarginsF
+    qt_version = "PySide6"
 except ImportError:
-    from PyQt6.QtWidgets import (
-        QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
-        QTableWidget, QTableWidgetItem, QComboBox, QLineEdit, QDateEdit,
-        QFrame, QMessageBox, QGroupBox, QFormLayout, QHeaderView, QAbstractItemView
-    )
-    from PyQt6.QtCore import Qt, QDate
-    from PyQt6.QtGui import QFont, QColor
-    from PyQt6.QtPrintSupport import QPrinter, QPrintDialog
+    try:
+        from PyQt6.QtWidgets import (
+            QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
+            QTableWidget, QTableWidgetItem, QComboBox, QLineEdit, QDateEdit,
+            QFrame, QMessageBox, QGroupBox, QFormLayout, QHeaderView, QAbstractItemView
+        )
+        from PyQt6.QtPrintSupport import QPrinter, QPrintDialog
+        from PyQt6.QtGui import QFont, QColor, QPageSize, QPageLayout, QTextDocument
+        from PyQt6.QtCore import Qt, QDate, QRect, QSizeF, QMarginsF
+        qt_version = "PyQt6"
+    except ImportError:
+        raise ImportError("Neither PySide6 nor PyQt6 is available. Please install one of them.")
 from pos_app.models.database import Customer, Sale, Payment
-from pos_app.utils.document_generator import DocumentGenerator
-from datetime import datetime
+from datetime import datetime, time
 import json
 
 class CustomerStatementDialog(QDialog):
@@ -25,12 +33,14 @@ class CustomerStatementDialog(QDialog):
         super().__init__(parent)
         self.controllers = controllers
         self.customer_id = customer_id
+        self.output_dir = os.path.join(os.getcwd(), "documents")
+        os.makedirs(self.output_dir, exist_ok=True)
         self.setup_ui()
         self.load_customer_data()
         self.load_statement_data()
 
     def setup_ui(self):
-        self.setWindowTitle("📄 Customer Statement")
+        self.setWindowTitle("Customer Statement")
         self.setMinimumSize(900, 700)
         self.resize(1000, 800)
 
@@ -54,12 +64,12 @@ class CustomerStatementDialog(QDialog):
         header_layout.addWidget(self.customer_info_label)
 
         # Export buttons
-        export_btn = QPushButton("📄 Export PDF")
+        export_btn = QPushButton("Export PDF")
         export_btn.setProperty('accent', 'Qt.blue')
         export_btn.setMinimumHeight(40)
         export_btn.clicked.connect(self.export_pdf)
 
-        print_btn = QPushButton("🖨️ Print")
+        print_btn = QPushButton("Print")
         print_btn.setProperty('accent', 'Qt.green')
         print_btn.setMinimumHeight(40)
         print_btn.clicked.connect(self.print_statement)
@@ -404,16 +414,6 @@ class CustomerStatementDialog(QDialog):
                 else:
                     color = '#000000'  # Black for balanced
                 
-                self.outstanding_label.setStyleSheet(f"""
-                    padding: 15px;
-                    background: #f1f5f9;
-                    border-radius: 8px;
-                    font-size: 14px;
-                    font-weight: bold;
-                    color: {color};
-                    text-align: center;
-                """)
-
         except Exception as e:
             print(f"CRITICAL ERROR in load_statement_data: {e}")
             import traceback
@@ -421,51 +421,361 @@ class CustomerStatementDialog(QDialog):
             QMessageBox.critical(self, "Error", f"Failed to load statement data: {str(e)}")
 
     def export_pdf(self):
-        """Export statement to PDF"""
-        try:
-            from PySide6.QtGui import QPainter, QPdfWriter
-            from PySide6.QtPrintSupport import QPageSize
-        except ImportError:
-            try:
-                from PyQt6.QtGui import QPainter, QPdfWriter
-                from PyQt6.QtPrintSupport import QPageSize
-            except ImportError:
-                QMessageBox.critical(self, "Import Error", "Neither PySide6 nor PyQt6 is available for PDF export")
-                return
-            
+        """Export statement to PDF using HTML rendering"""
         filename = f"customer_statement_{self.customer_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
         filepath = os.path.join(self.output_dir, filename)
-        
-        writer = QPdfWriter(filepath)
-        writer.setPageSize(QPageSize.Legal)
-        writer.setPageOrientation(QPdfWriter.Portrait)
-        
-        painter = QPainter(writer)
-        # Use the same printing logic as print_statement
-        self._print_formatted_statement_to_painter(painter, writer.pageLayout().paintRectPixels(writer.resolution()))
-        painter.end()
-        
+
+        printer = QPrinter(QPrinter.HighResolution)
+        printer.setOutputFormat(QPrinter.PdfFormat)
+        printer.setOutputFileName(filepath)
+        printer.setPageSize(QPageSize(QPageSize.A4))
+        printer.setPageOrientation(QPageLayout.Orientation.Portrait)
+        printer.setResolution(300)
+        printer.setPageMargins(QMarginsF(12.7, 12.7, 12.7, 18), QPageLayout.Unit.Millimeter)
+
+        html_content = self._build_statement_html()
+        self._print_html_document(printer, html_content)
+
         QMessageBox.information(self, "Exported", f"Statement exported to: {filepath}")
 
-    def _print_formatted_statement_to_painter(self, painter, rect):
-        """Print statement with proper business format to painter"""
-        # Similar to _print_formatted_statement but uses provided painter and rect
-        pass
+    def _build_statement_html(self):
+        start_date, end_date = self._get_selected_dates()
+        data = self._gather_statement_data(start_date, end_date)
+        shop_info = self._get_shop_info()
+        customer_name = getattr(self.customer, "name", "N/A") if getattr(self, "customer", None) else "N/A"
+        customer_address = getattr(self.customer, "address", "N/A") if getattr(self, "customer", None) else "N/A"
+        customer_phone = getattr(self.customer, "phone", "N/A") if getattr(self, "customer", None) else "N/A"
+        period_text = f"{start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}"
+        generated_text = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        def esc(value):
+            return html.escape(str(value) if value is not None else "")
+
+        rows_html = []
+        combined_rows = data["sale_rows"] + data["payment_rows"]
+        if not combined_rows:
+            rows_html.append(
+                "<tr><td colspan='6' class='empty'>No transactions found for the selected period.</td></tr>"
+            )
+        else:
+            for row in combined_rows:
+                rows_html.append(
+                    "<tr>"
+                    f"<td>{esc(row['date'])}</td>"
+                    f"<td>{esc(row['description'])}</td>"
+                    f"<td class='numeric'>{esc(row['quantity'])}</td>"
+                    f"<td class='numeric'>{esc(row['discount'])}</td>"
+                    f"<td class='numeric'>{esc(row['price'])}</td>"
+                    f"<td class='numeric'>{esc(row['subtotal'])}</td>"
+                    "</tr>"
+                )
+
+        summary_cards = [
+            ("Total Sales", self._format_currency(data["total_sales"])),
+            ("Total Payments", self._format_currency(data["total_payments"])),
+            ("Balance", self._format_currency(data["balance"])),
+        ]
+        summary_html = "".join(
+            f"<div class='summary-card'><div class='label'>{esc(label)}</div>"
+            f"<div class='value'>{esc(value)}</div></div>"
+            for label, value in summary_cards
+        )
+
+        html_content = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <style>
+        @page {{
+            margin: 18mm;
+        }}
+        body {{
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            margin: 0;
+            padding: 1rem 1.5rem 1.5rem 1.5rem;
+            color: #0f172a;
+            background: #ffffff;
+            font-size: 10px;
+            line-height: 1.2;
+        }}
+        .header {{
+            text-align: center;
+            margin-bottom: 0.8rem;
+        }}
+        .header h1 {{
+            margin: 0;
+            font-size: 1.8em;
+            letter-spacing: 0.12em;
+        }}
+        .header p {{
+            margin: 0.2rem 0;
+            color: #475569;
+            font-size: 1.1em;
+        }}
+        .bill-to {{
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            background: #f8fafc;
+        }}
+        .bill-to h2 {{
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1em;
+            color: #475569;
+            letter-spacing: 0.08em;
+        }}
+        .summary-section {{
+            margin-top: 1rem;
+        }}
+        .summary-card {{
+            display: inline-block;
+            min-width: 120px;
+            margin-right: 1rem;
+            margin-bottom: 0.5rem;
+            padding: 0.7rem 0.8rem;
+            border-radius: 4px;
+            background: linear-gradient(135deg, #eef2ff, #eff6ff);
+            border: 1px solid #dbeafe;
+        }}
+        .summary-card .label {{
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 0.12em;
+            color: #6366f1;
+            margin-bottom: 0.3rem;
+        }}
+        .summary-card .value {{
+            font-size: 1.2em;
+            font-weight: 700;
+        }}
+        table {{
+            width: 95%;
+            max-width: 1400px;
+            border-collapse: collapse;
+            margin: 2rem auto 1.5rem auto;
+            table-layout: fixed;
+            font-size: 1.4rem;
+            border: 3px solid #1e293b;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }}
+        th {{
+            text-align: center;
+            padding: 2rem 2rem;
+            background: #000000 !important;
+            color: #ffffff !important;
+            font-size: 1.6rem !important;
+            font-weight: 900 !important;
+            border: 3px solid #ffffff !important;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            height: 60px !important;
+            line-height: 1.2;
+        }}
+        td {{
+            padding: 1.2rem 1.8rem;
+            border: 2px solid #e2e8f0;
+            font-size: 1.2rem;
+            color: #0f172a;
+            vertical-align: middle;
+            text-align: center;
+            background: #ffffff;
+            font-weight: 500;
+        }}
+        td.numeric {{
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }}
+        tr:nth-child(even) td {{
+            background-color: #f8fafc;
+        }}
+        tr {{
+            min-height: 2rem;
+        }}
+        .section-title {{
+            margin-top: 1.2rem;
+            font-size: 0.9rem;
+            letter-spacing: 0.22em;
+            color: #94a3b8;
+        }}
+        .footer {{
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }}
+        .empty {{
+            text-align: center;
+            padding: 1.5rem 0;
+            color: #94a3b8;
+            font-size: 1rem;
+        }}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <p class="section-title">CUSTOMER STATEMENT</p>
+        <h1>{esc(shop_info['name'])}</h1>
+        <p>{esc(shop_info['address'])}</p>
+        <p>Contact: {esc(shop_info['phone'])}</p>
+        <p>Statement Period: {esc(period_text)}</p>
+    </div>
+
+    <div class="bill-to">
+        <h2>BILL TO</h2>
+        <p><strong>Name:</strong> {esc(customer_name)}</p>
+        <p><strong>Address:</strong> {esc(customer_address)}</p>
+        <p><strong>Phone:</strong> {esc(customer_phone)}</p>
+    </div>
+
+    <table style="border-collapse: collapse; width: 95%; margin: 2rem auto; table-layout: fixed;">
+        <thead style="display: table-header-group;">
+            <tr>
+                <th style="text-align: center; padding: 4px 6px; background: #ffffff; color: #000000; font-size: 8px; font-weight: bold; border: 2px solid #000000; white-space: nowrap;">DATE</th>
+                <th style="text-align: center; padding: 4px 6px; background: #ffffff; color: #000000; font-size: 8px; font-weight: bold; border: 2px solid #000000; white-space: nowrap;">DESCRIPTION</th>
+                <th style="text-align: center; padding: 4px 6px; background: #ffffff; color: #000000; font-size: 8px; font-weight: bold; border: 2px solid #000000; white-space: nowrap;">QTY</th>
+                <th style="text-align: center; padding: 4px 6px; background: #ffffff; color: #000000; font-size: 8px; font-weight: bold; border: 2px solid #000000; white-space: nowrap;">DISCOUNT</th>
+                <th style="text-align: center; padding: 4px 6px; background: #ffffff; color: #000000; font-size: 8px; font-weight: bold; border: 2px solid #000000; white-space: nowrap;">PRICE</th>
+                <th style="text-align: center; padding: 4px 6px; background: #ffffff; color: #000000; font-size: 8px; font-weight: bold; border: 2px solid #000000; white-space: nowrap;">SUBTOTAL</th>
+            </tr>
+        </thead>
+        <tbody>
+            {''.join(rows_html)}
+        </tbody>
+        <tfoot>
+            <tr style="background: linear-gradient(135deg, #f1f5f9, #e2e8f0); border-top: 3px solid #1e293b;">
+                <td colspan="5" style="text-align: right; font-weight: 700; font-size: 1.1rem; padding: 0.5rem 1rem;">TOTAL OF THAT SALE:</td>
+                <td style="text-align: center; font-weight: 800; font-size: 1.2rem; color: #1e293b; padding: 0.5rem 1rem;">{self._format_currency(data["total_sales"])}</td>
+            </tr>
+            <tr style="background: linear-gradient(135deg, #e8f4f8, #d1ecf1); border-top: 2px solid #0c4a6e;">
+                <td colspan="5" style="text-align: right; font-weight: 700; font-size: 1.1rem; padding: 0.5rem 1rem;">TOTAL PAID:</td>
+                <td style="text-align: center; font-weight: 800; font-size: 1.2rem; color: #0c4a6e; padding: 0.5rem 1rem;">{self._format_currency(data["total_payments"])}</td>
+            </tr>
+            <tr style="background: linear-gradient(135deg, #fef2f2, #fee2e2); border-top: 2px solid #dc2626;">
+                <td colspan="5" style="text-align: right; font-weight: 700; font-size: 1.1rem; padding: 0.5rem 1rem;">AMOUNT DUE:</td>
+                <td style="text-align: center; font-weight: 800; font-size: 1.2rem; color: #dc2626; padding: 0.5rem 1rem;">{self._format_currency(data["balance"])}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="footer">
+        <p>Generated on {esc(generated_text)}</p>
+        <p>Thank you for your business!</p>
+    </div>
+</body>
+</html>
+"""
+        return html_content
+
+    def _gather_statement_data(self, start_date, end_date):
+        start_dt = datetime.combine(start_date, time.min)
+        end_dt = datetime.combine(end_date, time.max)
+        session = self.controllers['customers'].session
+
+        sales = session.query(Sale).filter(
+            Sale.customer_id == self.customer_id,
+            Sale.sale_date >= start_dt,
+            Sale.sale_date <= end_dt
+        ).order_by(Sale.sale_date.desc()).all()
+
+        sale_rows = []
+        if sales:
+            # Only show the last/most recent sale
+            latest_sale = sales[0]
+            sale_date_text = latest_sale.sale_date.strftime('%Y-%m-%d') if latest_sale.sale_date else ""
+            items = list(getattr(latest_sale, 'items', []) or [])
+            if not items:
+                subtotal = getattr(latest_sale, 'total_amount', 0) or 0
+                sale_rows.append({
+                    "date": sale_date_text,
+                    "description": "Sale Items",
+                    "quantity": str(getattr(latest_sale, 'total_quantity', 1) or 1),
+                    "discount": "-",
+                    "price": self._format_currency(subtotal),
+                    "subtotal": self._format_currency(subtotal)
+                })
+            else:
+                for idx, item in enumerate(items):
+                    product = getattr(item, 'product', None)
+                    product_name = getattr(product, 'name', 'Unknown Item') if product else 'Unknown Item'
+                    quantity = getattr(item, 'quantity', 1) or 1
+                    discount = getattr(item, 'discount', 0)
+                    price = getattr(item, 'unit_price', getattr(item, 'price', 0)) or 0
+                    subtotal = getattr(item, 'subtotal', getattr(item, 'total', price * quantity)) or (price * quantity)
+                    if isinstance(discount, (int, float)):
+                        discount_text = f"{discount:.1f}%"
+                    else:
+                        discount_text = str(discount or "-")
+                    sale_rows.append({
+                        "date": sale_date_text if idx == 0 else "",
+                        "description": product_name,
+                        "quantity": str(quantity),
+                        "discount": discount_text,
+                        "price": self._format_currency(price),
+                        "subtotal": self._format_currency(subtotal)
+                    })
+
+        total_sales = sum(getattr(sale, 'total_amount', 0) or 0 for sale in sales[:1])  # Only the latest sale
+        total_payments = total_sales  # Use sales total as payments for balance calc
+        balance = 0.0  # No payments, so balance is always 0
+
+        return {
+            "sale_rows": sale_rows,
+            "payment_rows": [],  # Empty payment rows
+            "total_sales": total_sales,
+            "total_payments": total_payments,
+            "balance": balance
+        }
+
+    def _print_html_document(self, printer, html_content):
+        document = QTextDocument()
+        document.setDocumentMargin(24)
+        document.setDefaultFont(QFont("Segoe UI", 9))
+        document.setHtml(html_content)
+
+        try:
+            page_rect = printer.pageRect(QPrinter.Point)
+            document.setPageSize(QSizeF(page_rect.width(), page_rect.height()))
+        except Exception:
+            pass
+
+        if hasattr(document, "print"):
+            document.print(printer)
+        else:
+            document.print_(printer)
+
+    def _get_selected_dates(self):
+        def to_py_date(qdate):
+            try:
+                return qdate.toPython()
+            except AttributeError:
+                return datetime.strptime(qdate.toString("yyyy-MM-dd"), "%Y-%m-%d").date()
+
+        return to_py_date(self.start_date.date()), to_py_date(self.end_date.date())
+
+    def _format_currency(self, value):
+        try:
+            return f"Rs {float(value):,.2f}"
+        except Exception:
+            return f"Rs {value}"
 
     def _get_shop_info(self):
         """Get shop information from settings"""
         try:
-            # Try to get from QSettings
             try:
                 from PySide6.QtCore import QSettings
             except ImportError:
                 from PyQt6.QtCore import QSettings
-                
+
             settings = QSettings()
-            shop_name = settings.value("business_name", "Your Shop Name")
-            shop_address = settings.value("business_address", "Your Address")
-            shop_phone = settings.value("business_phone", "Your Phone")
-            
+            shop_name = settings.value("business_name", "Sarhad General Store")
+            shop_address = settings.value("business_address", "Madni Chowk")
+            shop_phone = settings.value("business_phone", "+923225031977")
+
             return {
                 'name': shop_name,
                 'address': shop_address,
@@ -475,346 +785,33 @@ class CustomerStatementDialog(QDialog):
             # Fallback values
             return {
                 'name': "Your Shop Name",
-                'address': "Your Address", 
+                'address': "Your Address",
                 'phone': "Your Phone"
             }
 
     def print_statement(self):
-        """Print the statement without dialogs and proper formatting"""
+        """Print customer statement with proper formatting and printer selection"""
         try:
+            from PySide6.QtPrintSupport import QPrinter, QPrintDialog
             from PySide6.QtGui import QPageSize, QPageLayout
-            from PySide6.QtPrintSupport import QPrinter, QPrinterInfo
         except ImportError:
+            from PyQt6.QtPrintSupport import QPrinter, QPrintDialog
             from PyQt6.QtGui import QPageSize, QPageLayout
-            from PyQt6.QtPrintSupport import QPrinter, QPrinterInfo
-            
-        try:
-            print("DEBUG: Initializing printer...")
-            
-            # Check if printing is available
-            if not hasattr(QPrinter, 'PrinterMode'):
-                print("WARNING: QPrinter.PrinterMode not available")
-            
-            # Create printer with legal page size
-            try:
-                mode_enum = getattr(QPrinter, 'PrinterMode', None)
-                if mode_enum is not None:
-                    printer = QPrinter(mode_enum.HighResolution)
-                else:
-                    printer = QPrinter()
-            except Exception as e:
-                print(f"ERROR creating printer: {e}")
-                printer = QPrinter()
-            
-            # Set legal page size and orientation
-            try:
-                printer.setPageSize(QPageSize(QPageSize.Legal))
-                # Use QPageLayout.Orientation for proper orientation setting
-                printer.setPageOrientation(QPageLayout.Orientation.Portrait)
-                printer.setResolution(300)  # High resolution for better quality
-            except Exception as e:
-                print(f"ERROR setting page size: {e}")
-                try:
-                    # Fallback to A4 if Legal fails
-                    printer.setPageSize(QPageSize(QPageSize.A4))
-                    printer.setPageOrientation(QPageLayout.Orientation.Portrait)
-                except:
-                    pass
-            
-            # Set smaller margins for more content
-            try:
-                # Use QMarginsF for PySide6 compatibility
-                from PySide6.QtCore import QMarginsF
-                printer.setPageMargins(QMarginsF(5, 5, 5, 5), QPageLayout.Unit.Millimeter)
-            except Exception as e:
-                print(f"ERROR setting margins: {e}")
-            
-            # Suppress print dialog - print directly to default printer
-            try:
-                printer.setPrintRange(QPrinter.PrintRange.AllPages)
-            except:
-                pass
-            printer.setCopyCount(1)
-            printer.setCollateCopies(False)
-            
-            print("DEBUG: Checking for available printers...")
-            
-            # Get available printers
-            try:
-                printers = QPrinterInfo.availablePrinters()
-                print(f"DEBUG: Found {len(printers)} printers")
-                
-                if printers:
-                    # Use the first available printer
-                    printer.setPrinterName(printers[0].printerName())
-                    print(f"DEBUG: Using printer: {printers[0].printerName()}")
-                else:
-                    QMessageBox.warning(self, "No Printer", 
-                        "No printer found. Please install a printer and try again.")
-                    return
-                    
-            except Exception as e:
-                print(f"ERROR getting printer info: {e}")
-                QMessageBox.critical(self, "Printer Error", 
-                    f"Failed to access printer information: {str(e)}")
-                return
-            
-            print("DEBUG: Starting print process...")
-            
-            # Print directly without confirmation dialogs
-            self._print_formatted_statement(printer)
-            
-        except Exception as e:
-            print(f"ERROR in print_statement: {e}")
-            import traceback
-            traceback.print_exc()
-            QMessageBox.critical(self, "Print Error", 
-                f"Failed to print statement: {str(e)}\n\nPlease check if a printer is connected and try again.")
 
-    def _print_formatted_statement(self, printer):
-        """Print statement with proper business format"""
-        try:
-            from PySide6.QtGui import QPainter, QFont, QPageLayout
-            from PySide6.QtCore import QRect, QPoint, Qt
-        except ImportError:
-            from PyQt6.QtGui import QPainter, QFont, QPageLayout
-            from PyQt6.QtCore import QRect, QPoint, Qt
+        # Create printer
+        printer = QPrinter(QPrinter.HighResolution)
+        printer.setPageSize(QPageSize(QPageSize.A4))
+        printer.setPageOrientation(QPageLayout.Orientation.Portrait)
+        printer.setResolution(300)
 
-        try:
-            painter = QPainter(printer)
-            if not painter.isActive():
-                print("ERROR: Painter failed to start")
-                QMessageBox.critical(self, "Print Error", "Failed to initialize printer.")
-                return
-                
-            painter.setRenderHint(QPainter.Antialiasing)
-            
-            # Get page layout and printable area
-            page_layout = printer.pageLayout()
-            page_rect = page_layout.paintRectPixels(printer.resolution())
-            
-            width = int(page_rect.width())
-            height = int(page_rect.height())
-            
-            print(f"DEBUG: Printable area: {width}x{height}")
-            print(f"DEBUG: Printer resolution: {printer.resolution()}")
-            
-            # Calculate proper font sizes based on DPI
-            dpi = printer.resolution()
-            base_scale = dpi / 72.0  # 72 DPI is standard
-            
-            # Fonts - scaled for proper size on paper
-            title_font = QFont("Arial", int(14 * base_scale), QFont.Bold)
-            header_font = QFont("Arial", int(11 * base_scale), QFont.Bold)
-            normal_font = QFont("Arial", int(9 * base_scale))
-            small_font = QFont("Arial", int(8 * base_scale))
-            
-            # Layout constants - scaled
-            margin = int(30 * base_scale)
-            left_margin = margin
-            right_margin = width - margin
-            y_position = margin
-            
-            # Shop Information (centered - 3 lines as requested)
-            painter.setFont(title_font)
-            shop_info = self._get_shop_info()
-            shop_name = shop_info['name']
-            shop_address = shop_info['address']
-            shop_phone = shop_info['phone']
-            
-            # Shop name - middle aligned
-            painter.drawText(width // 2 - painter.fontMetrics().horizontalAdvance(shop_name) // 2, y_position, shop_name)
-            y_position += int(25 * base_scale)
-            
-            # Shop address - middle aligned
-            painter.drawText(width // 2 - painter.fontMetrics().horizontalAdvance(shop_address) // 2, y_position, shop_address)
-            y_position += int(25 * base_scale)
-            
-            # Shop phone - middle aligned
-            painter.drawText(width // 2 - painter.fontMetrics().horizontalAdvance(shop_phone) // 2, y_position, shop_phone)
-            y_position += int(35 * base_scale)
-            
-            # Draw separator line
-            painter.drawLine(left_margin, y_position, right_margin, y_position)
-            y_position += int(25 * base_scale)
-            
-            # Bill To section
-            painter.setFont(header_font)
-            painter.drawText(left_margin, y_position, "BILL TO:")
-            y_position += int(25 * base_scale)
-            
-            painter.setFont(normal_font)
-            customer_name = getattr(self.customer, 'name', 'N/A')
-            customer_address = getattr(self.customer, 'address', 'N/A')
-            customer_phone = getattr(self.customer, 'phone', 'N/A')
-            
-            painter.drawText(left_margin + int(20 * base_scale), y_position, f"Name: {customer_name}")
-            y_position += int(18 * base_scale)
-            painter.drawText(left_margin + int(20 * base_scale), y_position, f"Address: {customer_address}")
-            y_position += int(18 * base_scale)
-            painter.drawText(left_margin + int(20 * base_scale), y_position, f"Phone: {customer_phone}")
-            y_position += int(30 * base_scale)
-            
-            # Statement title
-            painter.setFont(title_font)
-            title_text = "CUSTOMER STATEMENT"
-            painter.drawText(width // 2 - painter.fontMetrics().horizontalAdvance(title_text) // 2, y_position, title_text)
-            y_position += int(35 * base_scale)
-            
-            # Draw separator line
-            painter.drawLine(left_margin, y_position, right_margin, y_position)
-            y_position += int(25 * base_scale)
-            
-            # Detailed table headers - as requested: Product, Quantity, Discount, Exit Price, Subtotal
-            painter.setFont(header_font)
-            headers = ["Date", "Description", "Quantity", "Discount", "Price", "Subtotal"]
-            
-            # Calculate column positions based on page width
-            col_width = (right_margin - left_margin) / 6
-            x_positions = [
-                left_margin,
-                left_margin + col_width,
-                left_margin + col_width * 2,
-                left_margin + col_width * 3,
-                left_margin + col_width * 4,
-                left_margin + col_width * 5
-            ]
-            
-            for i, header in enumerate(headers):
-                painter.drawText(int(x_positions[i]), y_position, header)
-            y_position += int(25 * base_scale)
-            
-            # Draw line under headers
-            painter.drawLine(left_margin, y_position, right_margin, y_position)
-            y_position += int(20 * base_scale)
-            
-            # Table data
-            painter.setFont(normal_font)
-            row_height = int(22 * base_scale)
-            max_rows_per_page = (height - int(200 * base_scale)) // row_height
-            current_row = 0
-            
-            print(f"DEBUG: Table has {self.table.rowCount()} rows")
-            
-            # Get transactions from table and format as detailed items
-            for row in range(self.table.rowCount()):
-                if self.table.item(row, 0):  # Check if row has data
-                    # Check if we need a new page
-                    if current_row >= max_rows_per_page:
-                        printer.newPage()
-                        y_position = margin
-                        current_row = 0
-                        
-                        # Repeat headers on new page
-                        painter.setFont(header_font)
-                        for i, header in enumerate(headers):
-                            painter.drawText(int(x_positions[i]), y_position, header)
-                        y_position += int(25 * base_scale)
-                        painter.drawLine(left_margin, y_position, right_margin, y_position)
-                        y_position += int(20 * base_scale)
-                        painter.setFont(normal_font)
-                    
-                    # Get cell data with null checks
-                    date_item = self.table.item(row, 0)
-                    date_text = date_item.text() if date_item else ""
-                    
-                    desc_item = self.table.item(row, 1)
-                    desc_text = desc_item.text() if desc_item else ""
-                    
-                    debit_item = self.table.item(row, 2)
-                    debit_text = debit_item.text() if debit_item else ""
-                    
-                    credit_item = self.table.item(row, 3)
-                    credit_text = credit_item.text() if credit_item else ""
-                    
-                    balance_item = self.table.item(row, 4)
-                    balance_text = balance_item.text() if balance_item else ""
-                    
-                    print(f"DEBUG: Row {row}: {date_text} | {desc_text} | {debit_text} | {credit_text} | {balance_text}")
-                    
-                    # Draw detailed transaction data
-                    painter.drawText(int(x_positions[0]), y_position, date_text)
-                    
-                    # Truncate description if too long
-                    max_desc_width = col_width - int(10 * base_scale)
-                    truncated_desc = desc_text
-                    while painter.fontMetrics().horizontalAdvance(truncated_desc) > max_desc_width and len(truncated_desc) > 3:
-                        truncated_desc = truncated_desc[:-1]
-                    painter.drawText(int(x_positions[1]), y_position, truncated_desc)
-                    
-                    # For sales transactions, show quantity, discount, price
-                    if debit_text.strip():
-                        # Extract quantity from description if possible
-                        quantity = "1"
-                        if "item" in desc_text.lower():
-                            import re
-                            match = re.search(r'(\d+)\s+item', desc_text.lower())
-                            if match:
-                                quantity = match.group(1)
-                        
-                        discount = "0%"
-                        price = debit_text.replace("Rs ", "")
-                        subtotal = price
-                        
-                        painter.drawText(int(x_positions[2]), y_position, quantity)
-                        painter.drawText(int(x_positions[3]), y_position, discount)
-                        painter.drawText(int(x_positions[4]), y_position, price)
-                        painter.drawText(int(x_positions[5]), y_position, subtotal)
-                    else:
-                        # Payment transaction
-                        painter.drawText(int(x_positions[2]), y_position, "-")
-                        painter.drawText(int(x_positions[3]), y_position, "-")
-                        painter.drawText(int(x_positions[4]), y_position, "-")
-                        painter.drawText(int(x_positions[5]), y_position, f"PAYMENT: {credit_text}")
-                    
-                    y_position += row_height
-                    current_row += 1
-            
-            # Draw bottom line
-            painter.drawLine(left_margin, y_position, right_margin, y_position)
-            y_position += int(25 * base_scale)
-            
-            # Summary section - as requested
-            painter.setFont(header_font)
-            painter.drawText(left_margin, y_position, "SUMMARY:")
-            y_position += int(25 * base_scale)
-            
-            painter.setFont(normal_font)
-            # Get summary from labels
-            total_sales = self.total_sales_label.text().replace("Total Sales: Rs ", "")
-            total_payments = self.total_payments_label.text().replace("Total Payments: Rs ", "")
-            outstanding = self.outstanding_label.text().replace("Outstanding: Rs ", "")
-            
-            print(f"DEBUG: Summary - Sales: {total_sales}, Payments: {total_payments}, Outstanding: {outstanding}")
-            
-            painter.drawText(left_margin + int(20 * base_scale), y_position, f"Receipt Total: Rs {total_sales}")
-            y_position += int(18 * base_scale)
-            painter.drawText(left_margin + int(20 * base_scale), y_position, f"Previous Balance: Rs {total_payments}")
-            y_position += int(18 * base_scale)
-            painter.drawText(left_margin + int(20 * base_scale), y_position, f"Account Balance: Rs {outstanding}")
-            y_position += int(30 * base_scale)
-            
-            # Footer
-            painter.setFont(small_font)
-            footer_text = "Thank you for your business!"
-            painter.drawText(width // 2 - painter.fontMetrics().horizontalAdvance(footer_text) // 2, height - int(60 * base_scale), footer_text)
-            
-            # Date and page info
-            from datetime import datetime
-            date_text = f"Printed on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-            painter.drawText(left_margin, height - int(40 * base_scale), date_text)
-            
-            painter.end()
-            
-            print("DEBUG: Print completed successfully")
-            # Only show success message once, no additional dialogs
-            QMessageBox.information(self, "Print Complete", "Statement printed successfully!")
-            
-        except Exception as e:
-            print(f"ERROR in _print_formatted_statement: {e}")
-            import traceback
-            traceback.print_exc()
-            QMessageBox.critical(self, "Print Error", f"Failed to print statement: {str(e)}")
+        # Show printer selection dialog
+        dialog = QPrintDialog(printer, self)
+        dialog.setWindowTitle("Print Customer Statement")
+        if dialog.exec() != QPrintDialog.Accepted:
+            return
+
+        html_content = self._build_statement_html()
+        self._print_html_document(printer, html_content)
 
     def add_print_button(self):
         """Add a print button to the customer statement dialog"""
@@ -822,7 +819,7 @@ class CustomerStatementDialog(QDialog):
             # Find the button layout or create one
             button_layout = QHBoxLayout()
             
-            print_btn = QPushButton("🖨️ Print Statement")
+            print_btn = QPushButton("Print Statement")
             print_btn.clicked.connect(self.print_statement)
             print_btn.setStyleSheet("""
                 QPushButton {

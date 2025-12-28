@@ -725,10 +725,27 @@ class CustomersWidget(QWidget):
                 # Get customer data
                 try:
                     customer_name = self.table.item(row, 0).text() if self.table.item(row, 0) else ""
-                    customer_credit_limit = self.table.item(row, 4).text() if self.table.item(row, 4) else "0"
-                    customer_balance = self.table.item(row, 5).text() if self.table.item(row, 5) else "0"
+                    # Get customer ID to fetch correct data
+                    item = self.table.item(row, 0)
+                    customer_id = item.data(Qt.UserRole) if item else None
                     
-                    print(f"DEBUG: Row {row}: Name={customer_name}, Balance={customer_balance}")
+                    if customer_id:
+                        # Fetch customer to get correct balance data
+                        from pos_app.models.database import Customer
+                        customer = self.controller.session.get(Customer, customer_id)
+                        if customer:
+                            # Previous Balance: Show current balance as previous balance
+                            previous_balance = getattr(customer, 'current_credit', 0.0) or 0.0
+                            # Last Paid: For now, show 0 or calculate from payments (simplified)
+                            last_paid = 0.0  # TODO: Calculate from actual payment history
+                        else:
+                            previous_balance = 0.0
+                            last_paid = 0.0
+                    else:
+                        previous_balance = 0.0
+                        last_paid = 0.0
+                    
+                    print(f"DEBUG: Row {row}: Name={customer_name}, Previous Balance={previous_balance}, Last Paid={last_paid}")
                 except Exception as e:
                     print(f"ERROR reading row {row}: {e}")
                     continue
@@ -743,18 +760,18 @@ class CustomersWidget(QWidget):
                 painter.drawRect(int(x_positions[0]), y_position - 5, int(col_widths[0]), row_height - 5)
                 painter.drawText(int(x_positions[0]) + 5, y_position, truncated_name)
                 
-                # Column 2: Previous Balance (credit limit from table)
-                balance_text = customer_credit_limit if customer_credit_limit.strip() else "0"
+                # Column 2: Previous Balance
+                balance_text = f"{previous_balance:.2f}"
                 painter.drawRect(int(x_positions[1]), y_position - 5, int(col_widths[1]), row_height - 5)
                 painter.drawText(int(x_positions[1]) + 5, y_position, balance_text)
                 
-                # Column 3: Last Paid (show current balance as last paid)
-                last_paid_text = customer_balance if customer_balance.strip() else "0"
+                # Column 3: Last Paid
+                last_paid_text = f"{last_paid:.2f}"
                 painter.drawRect(int(x_positions[2]), y_position - 5, int(col_widths[2]), row_height - 5)
                 painter.drawText(int(x_positions[2]) + 5, y_position, last_paid_text)
                 
-                # Column 4: New Balance (show credit limit as new balance)
-                new_balance_text = customer_credit_limit if customer_credit_limit.strip() else "0"
+                # Column 4: New Balance (current balance)
+                new_balance_text = f"{previous_balance:.2f}"  # Same as previous for now
                 painter.drawRect(int(x_positions[3]), y_position - 5, int(col_widths[3]), row_height - 5)
                 painter.drawText(int(x_positions[3]) + 5, y_position, new_balance_text)
                 
