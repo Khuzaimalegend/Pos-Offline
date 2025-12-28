@@ -7280,20 +7280,27 @@ class SalesWidget(QWidget):
 
             # Auto-increase amount paid to match total when products are added
             if hasattr(self, 'amount_paid_input'):
-                print(f"[DEBUG] Auto-increasing amount_paid: total={total}")
                 try:
-                    self.amount_paid_input.blockSignals(True)
-                    if total > 0:
-                        self.amount_paid_input.setValue(total)
-                        print(f"[DEBUG] Set amount_paid to {total}")
+                    current_paid = float(self.amount_paid_input.value())
+                    if current_paid == 0.0 or current_paid < total:
+                        print(f"[DEBUG] Auto-increasing amount_paid: current={current_paid}, total={total}")
+                        self.amount_paid_input.blockSignals(True)
+                        try:
+                            self.amount_paid_input.setValue(total)
+                            print(f"[DEBUG] Set amount_paid to {total}")
+                        finally:
+                            self.amount_paid_input.blockSignals(False)
                     else:
-                        self.amount_paid_input.setValue(0)
-                        print(f"[DEBUG] Set amount_paid to 0")
-                finally:
+                        print(f"[DEBUG] Not auto-increasing amount_paid: current={current_paid} >= total={total}")
+                except Exception as e:
+                    print(f"[DEBUG] Error auto-increasing amount_paid: {e}")
+                    # Fallback: always set if there was an error
                     try:
+                        self.amount_paid_input.blockSignals(True)
+                        self.amount_paid_input.setValue(total)
+                        print(f"[DEBUG] Set amount_paid to {total} (fallback)")
+                    finally:
                         self.amount_paid_input.blockSignals(False)
-                    except Exception:
-                        pass
 
             # Update change display
             try:

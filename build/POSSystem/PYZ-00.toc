@@ -1397,6 +1397,10 @@
    'D:\\Latest POS\\POS (3)\\POS (3)\\POS '
    '(3)\\POS\\pos_app\\views\\payment_analytics.py',
    'PYMODULE'),
+  ('pos_app.views.postgres_setup',
+   'D:\\Latest POS\\POS (3)\\POS (3)\\POS '
+   '(3)\\POS\\pos_app\\views\\postgres_setup.py',
+   'PYMODULE'),
   ('pos_app.views.purchases',
    'D:\\Latest POS\\POS (3)\\POS (3)\\POS '
    '(3)\\POS\\pos_app\\views\\purchases.py',

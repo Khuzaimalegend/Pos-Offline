@@ -724,7 +724,7 @@ class InventoryWidget(QWidget):
                     purchase_price=dialog.purchase_price_input.value(),
                     wholesale_price=dialog.wholesale_price_input.value(),
                     retail_price=dialog.retail_price_input.value(),
-                    stock_level=dialog.stock_input.value(),
+                    stock_level=dialog._parse_stock_value(dialog.stock_input.text()),
                     reorder_level=dialog.reorder_input.value(),
                     supplier_id=dialog.supplier_input.currentData() or 1,
                     unit="pcs",
@@ -1027,9 +1027,8 @@ class ProductDialog(QDialog):
         self.purchase_price_input.setMinimum(0.00)
         self.purchase_price_input.setDecimals(2)
         
-        self.stock_input = NavigationSpinBox()
-        self.stock_input.setMaximum(100000)
-        self.stock_input.setMinimum(0)
+        self.stock_input = QLineEdit()
+        self.stock_input.setPlaceholderText("Current stock (e.g., 100+4 = 104)")
         
         self.reorder_input = NavigationSpinBox()
         self.reorder_input.setMaximum(10000)
@@ -1178,7 +1177,7 @@ class ProductDialog(QDialog):
             errors.append(f"• Purchase price (Rs {purchase_price:,.2f}) cannot be greater than retail price (Rs {retail_price:,.2f})\n  You will make a LOSS!")
         
         # Validate stock
-        stock = self.stock_input.value()
+        stock = self._parse_stock_value(self.stock_input.text())
         reorder = self.reorder_input.value()
         
         if stock < 0:
@@ -1369,7 +1368,7 @@ class ProductDialog(QDialog):
             # Determine number of copies
             copies = settings.get_setting('default_copies', 1)
             if settings.get_setting('print_copies_from_stock', True):
-                stock_level = self.stock_input.value()
+                stock_level = self._parse_stock_value(self.stock_input.text())
                 if stock_level > 0:
                     copies = min(stock_level, 100)  # Max 100 copies to prevent excessive printing
             
@@ -1451,42 +1450,36 @@ class ProductDialog(QDialog):
         """Save product - alias for validate_and_accept"""
         self.validate_and_accept()
     
-    def get_product_data(self):
-        """Get product data from form"""
-        return {
-            'name': self.name_input.text().strip(),
-            'description': self.desc_input.text().strip() or None,
-            'sku': self.sku_input.text().strip() or None,
-            'barcode': self.barcode_input.text().strip() or None,
-            'purchase_price': self.purchase_price_input.value(),
-            'wholesale_price': self.wholesale_price_input.value(),
-            'retail_price': self.retail_price_input.value(),
-            'stock_level': self.stock_input.value(),
-            'reorder_level': self.reorder_input.value(),
-            'supplier_id': self.supplier_input.currentData(),
-            'product_category_id': self.category_input.currentData(),
-            'product_subcategory_id': self.subcategory_input.currentData(),
-            'category': self.category_input.currentText() if self.category_input.currentData() else None,
-            'subcategory': self.subcategory_input.currentText() if self.subcategory_input.currentData() else None,
-            'unit': 'pcs',
-            'shelf_location': self.rack_input.text().strip() or '',
-            'warehouse_location': None,
-            'packaging_type_id': None,
-            'brand': None,
-            'colors': None,
-            'model': None,
-            'size': None,
-            'dimensions': None,
-            'tax_rate': None,
-            'discount_percentage': None,
-            'notes': None,
-            'product_type': 'SIMPLE',
-            'warranty': None,
-            'weight': None,
-            'expiry_date': None,
-            'is_active': True,
-            'low_stock_alert': True
-        }
+    def _parse_stock_value(self, stock_text):
+        """Parse stock value supporting + notation (e.g., '100+4' = 104)"""
+        if not stock_text or not stock_text.strip():
+            return 0
+        
+        stock_text = stock_text.strip()
+        
+        # Check if it contains + notation
+        if '+' in stock_text:
+            try:
+                # Split by + and sum all parts
+                parts = stock_text.split('+')
+                total = 0
+                for part in parts:
+                    part = part.strip()
+                    if part:
+                        total += int(part)
+                return total
+            except ValueError:
+                # If parsing fails, try to convert as-is
+                try:
+                    return int(stock_text)
+                except ValueError:
+                    return 0
+        else:
+            # No + notation, just convert to int
+            try:
+                return int(stock_text)
+            except ValueError:
+                return 0
     
     def keyPressEvent(self, event):
         """Handle key press events for navigation"""

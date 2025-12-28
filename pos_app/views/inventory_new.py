@@ -830,7 +830,29 @@ class InventoryWidget(QWidget):
             if not product:
                 QMessageBox.warning(self, "Error", "Product not found")
                 return
-            dialog = ProductDialog(self, product)
+            
+            # Check if simple product dialog is enabled in settings
+            use_simple_dialog = False
+            try:
+                # Check app config for simple dialog setting
+                import json
+                import os
+                config_path = os.path.join(os.path.dirname(__file__), 'config', 'app_config.json')
+                if os.path.exists(config_path):
+                    with open(config_path, 'r') as f:
+                        config = json.load(f)
+                        use_simple_dialog = config.get('use_simple_product_dialog', False)
+            except Exception:
+                pass
+            
+            if use_simple_dialog:
+                # Use simple product dialog
+                from pos_app.views.simple_product_dialog import SimpleProductDialog
+                dialog = SimpleProductDialog(self, product)
+            else:
+                # Use full product dialog
+                dialog = ProductDialog(self, product)
+            
             if dialog.exec() == QDialog.Accepted:
                 product.name = dialog.name_input.text()
                 product.sku = dialog.sku_input.text()

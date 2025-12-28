@@ -90,7 +90,15 @@ class DocumentGenerator:
                 price = getattr(it, "unit_price", 0.0)
                 total = getattr(it, "total", qty * price)
                 subtotal += total
-                f.write(f"{qty:<3} {pname:<20} {total:>8.2f}\n")
+                
+                # Mark items with zero quantity or total
+                marker = ""
+                if qty == 0:
+                    marker += "[QTY=0] "
+                if total == 0.0:
+                    marker += "[AMT=0] "
+                
+                f.write(f"{qty:<3} {marker}{pname:<20} {total:>8.2f}\n")
 
             vat = getattr(sale, "tax_amount", 0.0)
             cash = getattr(sale, "amount_paid", subtotal + vat)
